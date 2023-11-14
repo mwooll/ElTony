@@ -5,4 +5,4 @@ In our project we will build an interactive visual recommender system that shoul
 
 Group members: Lara Fried, Zejie Guo, Matija Zver, Mark Woolley
 
-The Pokémon images were taken from https://www.kaggle.com/datasets/kvpratama/pokemon-images-dataset/
+The Pokémon images were taken from https://www.kaggle.com/datasets/kvpratama/pokemon-images-dataset/; https://www.kaggle.com/datasets/vishalsubbiah/pokemon-images-and-types?select=pokemon.csv
