@@ -10,6 +10,12 @@ from sklearn.preprocessing import StandardScaler
 
 def get_recommendations(filtered_dataset):
     pokemon_data = filtered_dataset
+    #Add type interactions:
+    # read in csv with type interactions
+    # To fight against a type look at column of this type, and recommend types in which that column has a 2
+
+
+
 
     selected_cols = ['Total', 'HP', 'Attack', 'Defense', 'Sp_Atk', 'Sp_Def', 'Speed', 'Type_1', 'Type_2', 'Name']
     pokemon_data = pokemon_data[selected_cols]
