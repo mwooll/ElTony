@@ -10,7 +10,7 @@ from poke_rec import get_recommendations
 
 pokemon_data = pd.read_csv('pokemon.csv') # Your Pokemon data
 filter_params = {
-            'type': ['Water'],
+            'type': ['Rock'],
             'color': ['Red', 'Blue']
 }
 

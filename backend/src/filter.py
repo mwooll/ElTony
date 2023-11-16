@@ -2,6 +2,8 @@
 Filter Dataset according to params set by user
 
 """
+import pandas as pd
+
 
 def filter_data(dataset,filters):
     filtered_data = dataset.copy()
@@ -10,7 +12,27 @@ def filter_data(dataset,filters):
     if 'type' in filters:
         types = filters['type']
         if types:
-            filtered_data = filtered_data[(filtered_data['Type_1'].isin(types)) | (filtered_data['Type_2'].isin(types))]
+            # Add type interactions:
+
+            # Read in csv with type interactions
+            df_type = pd.read_csv('typing_chart.csv')
+
+            # Initialize an empty list to store recommended types
+            recommended_types = []
+
+            # Iterate through each selected type
+            for selected_type in types:
+                # Look at the column corresponding to the selected type
+                interaction_column = df_type[selected_type]
+
+                # Find types where the column has a value of 2
+                recommended_types.extend(df_type.loc[interaction_column == 2, 'Types'].tolist())
+
+            # Remove duplicates from the recommended types list
+            recommended_types = list(set(recommended_types))
+
+            # Filter the data for the returned types
+            filtered_data = filtered_data[filtered_data['Type_1'].isin(recommended_types)]
 
     # Filter based on legendary status
     if 'legendary' in filters:
