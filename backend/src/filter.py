@@ -4,7 +4,6 @@ Filter Dataset according to params set by user
 """
 import pandas as pd
 
-
 def filter_data(dataset,filters):
     filtered_data = dataset.copy()
 
@@ -37,8 +36,8 @@ def filter_data(dataset,filters):
     # Filter based on legendary status
     if 'legendary' in filters:
         legendary = filters['legendary']
-        if legendary is not None:
-            filtered_data = filtered_data[filtered_data['isLegendary'] == legendary]
+        if legendary is not None and len(legendary) == 1:
+            filtered_data = filtered_data[filtered_data['isLegendary'] == (legendary[0] == 'True')]
 
     # Filter based on generation
     if 'generation' in filters:
@@ -52,6 +51,6 @@ def filter_data(dataset,filters):
         if color:
             filtered_data = filtered_data[filtered_data['Color'].isin(color)]
 
-    # Add more filters based on your dataset columns
+
 
     return filtered_data

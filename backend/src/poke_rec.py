@@ -4,10 +4,11 @@ Recommender for the ideal pokemon team
 return recommendation as well as Key feature for recommendation
 
 """
-import pandas
 import pandas as pd
 from sklearn.cluster import KMeans
-from sklearn.preprocessing import StandardScaler
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.pipeline import Pipeline
 
 def get_recommendations(filtered_dataset):
     pokemon_data = filtered_dataset
@@ -19,21 +20,42 @@ def get_recommendations(filtered_dataset):
     pokemon_data = pokemon_data.dropna(subset=['Type_1'])
 
     pokemon_data['Types'] = pokemon_data[['Type_1', 'Type_2']].astype(str).agg(','.join, axis=1)
-    #Check Data Shape
-    print(pokemon_data.shape)
 
-    # selected features & Standardize
-    features = ['Total', 'HP', 'Attack', 'Defense', 'Sp_Atk', 'Sp_Def', 'Speed']
-    scaler = StandardScaler()
-    pokemon_data[features] = scaler.fit_transform(pokemon_data[features])
+    # selected features
+    features = ['Total', 'HP', 'Attack', 'Defense', 'Sp_Atk', 'Sp_Def', 'Speed', 'Types']
+
+    # Define transformers for numerical and categorical features
+    numeric_features = ['Total', 'HP', 'Attack', 'Defense', 'Sp_Atk', 'Sp_Def', 'Speed']
+    numeric_transformer = Pipeline(steps=[
+        ('scaler', StandardScaler())
+    ])
+
+    categorical_features = ['Types']
+    categorical_transformer = Pipeline(steps=[
+        ('onehot', OneHotEncoder())
+    ])
+
+    # Use ColumnTransformer to apply different transformers to numerical and categorical features
+    preprocessor = ColumnTransformer(
+        transformers=[
+            ('num', numeric_transformer, numeric_features),
+            ('cat', categorical_transformer, categorical_features)
+        ])
 
     # K-Means clustering
     n_clusters = 10
     kmeans = KMeans(n_clusters=n_clusters, random_state=42)
-    pokemon_data['Cluster'] = kmeans.fit_predict(pokemon_data[features])
+
+    # Create a pipeline with preprocessing and clustering steps
+    pipeline = Pipeline(steps=[('preprocessor', preprocessor),
+                               ('kmeans', kmeans)])
+
+    # Fit and predict clusters
+    pokemon_data['Cluster'] = pipeline.fit_predict(pokemon_data[features])
 
     # Sort Pokémon within each cluster by total stats
     pokemon_data = pokemon_data.sort_values(by=['Cluster', 'Total'], ascending=[True, False])
+
     team_size = 6
     recommended_team = []
 
@@ -51,7 +73,7 @@ def get_recommendations(filtered_dataset):
                         pokemon['Type_1'] not in selected_types and \
                         pokemon['Type_2'] not in selected_types:
                     # Add a column indicating the key feature
-                    key_feature = features[pokemon[features].argmax()]
+                    key_feature = features[pokemon[numeric_features].argmax()]
                     pokemon['Key_Feature'] = key_feature
 
                     recommended_team.append(pd.DataFrame([pokemon]))
@@ -62,7 +84,7 @@ def get_recommendations(filtered_dataset):
                     # Drop the selected Pokemon from pokemon_data
                     pokemon_data = pokemon_data[pokemon_data.index != pokemon.name]
 
-        # Concatenate the DataFrames in the recommended_team list
+    # Concatenate the DataFrames in the recommended_team list
     recommended_team = pd.concat(recommended_team, ignore_index=True)
 
     return recommended_team
