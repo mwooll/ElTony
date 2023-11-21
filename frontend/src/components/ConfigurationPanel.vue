@@ -112,10 +112,6 @@ export default {
   },
 
   methods: {
-    changeCompanyId(companyId) {
-      this.companies.selectedValue = this.companies.values[companyId-1]
-      //this.linePlotId += 1 // why do we need this?
-    },
 
     handlePokemonSelection(stats) {
     this.selectedPokemonStats = stats;
