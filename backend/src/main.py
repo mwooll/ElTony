@@ -10,7 +10,7 @@ import json
 from flask import Flask
 from flask_cors import CORS
 from flask_restx import Resource, Api
-#from backend.src.model import Pokemon
+from backend.src.model import Pokemon
 from flask import request
 
 app = Flask(__name__)
