@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar app color=indigo>
-      <h2>&nbsp; Mark Woolley 19-745-223</h2>
+      <h2>    Pokemon Rec </h2>
     </v-app-bar>
     <v-main>
       <ConfigurationPanel/>
@@ -21,7 +21,6 @@ export default {
   },
 
   data: () => ({
-    //
   }),
 }
 </script>
