@@ -76,7 +76,6 @@ class PokemonList(Resource):
             reader = csv.DictReader(f)
             data = list(reader)
 
-        
         pokemons = [Pokemon(**{k: v if v != '' else None for k, v in item.items()}) for item in data]
 
         return [pokemon.to_json() for pokemon in pokemons]
@@ -88,10 +87,8 @@ class PokemonResource(Resource):
             reader = csv.DictReader(f)
             data = list(reader)
 
-        
         pokemons = [Pokemon(**item) for item in data]
 
-        
         for pokemon in pokemons:
             if pokemon.Name == name:
                 return pokemon.to_json()
