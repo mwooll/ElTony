@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row align="center" justify="center" class="mt-1 mb-0">
-      <h3>Overview of {{ $props.selectedCategory }} Companies</h3>
+      <h3>Attacke/Defense </h3>
     </v-row>
     <div style="height: 80vh">
       <div id='myScatterPlot' style="height: inherit"></div>
@@ -30,37 +30,40 @@ export default {
     }
   },
 
-  data: () => ({
-    ScatterPlotData: {x: [], y: [], name: [], category: [], color: [], symbol: []},
-    colors: {"tech": "orange", "health": "purple", "bank": "green"},
-    symbols: {"tech": "star", "health": "cross", "bank": "square"},
-  }),
+  data() {
+    return {
+      ScatterPlotData: { x: [], y: [], name: [], typeColor: [], hp: [], attack: [], defense: [], spAtk: [], spDef: [], speed: [] },
+    };
+  },
   mounted() {
     this.fetchData()
   },
 
   methods: {
     fetchData: async function () {
-      // req URL to retrieve companies from backend
-      var reqUrl = 'http://127.0.0.1:5000/companies?category=' + this.$props.selectedCategory
-      //console.log("ReqURL " + reqUrl)
+  var reqUrl = 'http://127.0.0.1:5000/pokemons';
+  const response = await fetch(reqUrl);
+  const responseData = await response.json();
 
-      // await response and data
-      const response = await fetch(reqUrl)
-      const responseData = await response.json();
-      // transform data to usable by scatter plot
-      responseData.forEach((company) => {
-        this.ScatterPlotData.x.push(company.founding_year)
-        this.ScatterPlotData.y.push(company.employees)
-        this.ScatterPlotData.name.push(company.name)
-        this.ScatterPlotData.category.push(company.category)
-      })
-      // assign color and symbol based on category
-      this.stylizeMarkers()
+  this.ScatterPlotData.x = [];
+  this.ScatterPlotData.y = [];
+  this.ScatterPlotData.name = [];
 
-      // after the data is loaded, draw the plot
-      this.drawScatterPlot()
-    },
+  responseData.forEach((pokemon) => {
+    this.ScatterPlotData.x.push(pokemon.Attack);
+    this.ScatterPlotData.y.push(pokemon.Defense);
+    this.ScatterPlotData.name.push(pokemon.Name);
+    this.ScatterPlotData.typeColor.push(pokemon.TypeColor);
+    this.ScatterPlotData.hp.push(pokemon.HP);
+    this.ScatterPlotData.attack.push(pokemon.Attack);
+    this.ScatterPlotData.defense.push(pokemon.Defense);
+    this.ScatterPlotData.spAtk.push(pokemon.Sp_Atk);
+    this.ScatterPlotData.spDef.push(pokemon.Sp_Def);
+    this.ScatterPlotData.speed.push(pokemon.Speed);
+  });
+
+  this.drawScatterPlot();
+},
 
     stylizeMarkers() {
       this.ScatterPlotData.category.forEach((cat) => {
@@ -71,76 +74,46 @@ export default {
 
     drawScatterPlot() {
       var trace1 = {
-        x: this.ScatterPlotData.x,
-        y: this.ScatterPlotData.y,
+        x: this.ScatterPlotData.x, // Attack
+        y: this.ScatterPlotData.y, // Defense
         mode: 'markers',
         type: 'scatter',
         marker: {
-          color: this.ScatterPlotData.color,
-          symbol: this.ScatterPlotData.symbol,
           size: 10,
+          color: this.ScatterPlotData.typeColor,
         },
         name: "",
-        hovertemplate: '<b>%{text}</b>'+
-                        '<br>Founding Year: %{x}' +
-                        '<br>Employees: %{y}',
-        text: this.ScatterPlotData.name,
+        hovertemplate: '<b>%{text}</b>' +
+                        '<br>Attack: %{x}' +
+                        '<br>Defense: %{y}',
+        text: this.ScatterPlotData.name, // Name of the Pokemon
       };
       var data = [trace1];
       var layout = {
-        xaxis: {title: "Founding Year"},
-        yaxis: {title: "Employees"}
-      }
+        xaxis: { title: "Attack" },
+        yaxis: { title: "Defense" }
+      };
       var config = {
         responsive: true,
         displayModeBar: false,
-      }
+      };
       Plotly.newPlot('myScatterPlot', data, layout, config);
-      this.clickScatterPlot()
+
+      document.getElementById('myScatterPlot').on('plotly_click', function(data){
+        var pointIndex = data.points[0].pointIndex;
+        this.selectedPokemonStats = {
+          hp: this.ScatterPlotData.hp[pointIndex],   
+          attack: this.ScatterPlotData.attack[pointIndex],
+          defense: this.ScatterPlotData.defense[pointIndex],
+          spAtk: this.ScatterPlotData.spAtk[pointIndex],
+          spDef: this.ScatterPlotData.spDef[pointIndex],
+          speed: this.ScatterPlotData.speed[pointIndex],
+        };
+        this.$emit('pokemonSelected', this.selectedPokemonStats);
+      }.bind(this));
     },
 
-    clickScatterPlot() {
-      var pn = 0
-      var that = this
-      var myPlot = document.getElementById('myScatterPlot')
-      myPlot.on('plotly_click', function (data) {
-        for (var i = 0; i < data.points.length; i++) {
-
-          // get the index of point
-          pn = data.points[i].pointNumber;
-
-          // get symbols
-          var symbols = data.points[0].data.marker.symbol
-          var offset = 0
-          if (symbols.length <= 5) {
-            offset = symbols[pn] === "square" ? 10 : (symbols[pn] === "cross" ? 5 : 0);
-          }
-
-          // emit event to change the currently selected company in the a) configuration panel
-          // and b) update the Profit View
-          that.$emit('changeCurrentlySelectedCompany', pn + 1 + offset)
-
-          // get the colors
-          var colors = []
-          let symToCol = {"star": "orange", "cross": "purple", "square": "green"}
-          symbols.forEach((sym) => {
-                colors.push(symToCol[sym])
-              }
-          )
-
-          // color the selected point blue
-          colors[pn] = "blue";
-
-          // update the marker and plot
-          var update = {marker: {
-              color: colors,
-              symbol: symbols,
-              size: 10,
-            }};
-          Plotly.restyle('myScatterPlot', update);
-        }
-      });
-    }
+    
   }
 }
 </script>

@@ -5,74 +5,57 @@
         <v-col md="2" class="sideBar">
             <v-row>
               <v-col cols="12" sm="12">
-                <div class="control-panel-font">Company Overview</div>
+                <div class="control-panel-font">Pokemon Overview</div>
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="12" sm="12">
                 <v-select
-                    :items="categories.values"
-                    label="Select a category"
+                    :items="pokemons.values"
+                    label="Select a Pokemon"
                     dense
-                    v-model="categories.selectedValue"
+                    v-model="pokemons.selectedValue"
                 ></v-select>
 
               </v-col>
             </v-row>
           <v-row>
             <v-col cols="12" sm="12">
-              <div class="control-panel-font">Profit View of Company</div>
+              <div class="control-panel-font">Filters</div>
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="12" sm="12">
               <v-select
-                  :items="companies.values"
-                  label="Select a company"
-                  dense
-                  v-model="companies.selectedValue"
+                  label="Filter 1"
               ></v-select>
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="12" sm="12">
               <v-select
-                  :items="year.values"
-                  label="Select a year"
-                  dense
-                  v-model="year.selectedValue"
+                  label="Filter 2"
               ></v-select>
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="12" sm="12">
               <v-select
-                  :items="algorithm.values"
-                  label="Select an algorithm"
-                  dense
-                  v-model="algorithm.selectedValue"
+                  label="Filter 3"
               ></v-select>
             </v-col>
           </v-row>
         </v-col>
 
-        <v-col md="3">
+        <v-col md="4">
           <ScatterPlot :key="scatterPlotId"
-                       :selectedCategory="categories.selectedValue"
-                       @changeCurrentlySelectedCompany="changeCompanyId"
+                        :selectedCategory="categories.selectedValue"
+                        @pokemonSelected="handlePokemonSelection"
           />
         </v-col>
-        <v-col md="3">
-          <LinePlot :key="linePlotId"
-                    :selectedCompanyName="companies.selectedValue"
-                    :selectedAlgorithm="algorithm.selectedValue"/>
-        </v-col>
         <v-col md="4">
-          <ExtraPlot :key="extraPlotId"
-                     :selectedCategory="categories.selectedValue"
-                     :selectedAlgorithm="algorithm.selectedValue"
-                     :selectedYear="year.selectedValue"
-                     @changeCurrentlySelectedCompany="changeCompanyId"
+          <SpiderPlot :pokemonStats="selectedPokemonStats"
+                      :series="formattedSeriesForRadarChart"  
           />
         </v-col>
       </v-row>
@@ -83,16 +66,24 @@
 <script>
 
 import ScatterPlot from './ScatterPlot';
-import LinePlot from './LinePlot';
-import ExtraPlot from "./ExtraPlot.vue";
+import SpiderPlot from "./RadarChart.vue";
 
 export default {
-  components: {ScatterPlot, LinePlot, ExtraPlot},
+  components: {ScatterPlot, SpiderPlot},
   data: () => ({
     scatterPlotId: 0,
     linePlotId: 0,
     extraPlotId: 0,
     columnWidth: "11",
+    
+    selectedPokemonStats: {
+      hp: 0,
+      attack: 0,
+      defense: 0,
+      spAtk: 0,
+      spDef: 0,
+      speed: 0,
+    },
 
     categories: {
       values: ['all', 'tech', 'health', 'bank'],
@@ -105,6 +96,10 @@ export default {
     algorithm: {
       values: ['none', 'random', 'regression'],
       selectedValue: 'none'
+    },
+    pokemons: {
+      values: [],
+      selectedValue: null
     },
     year: {
       values: [2017, 2018, 2019, 2020, 2021],
@@ -122,20 +117,29 @@ export default {
       //this.linePlotId += 1 // why do we need this?
     },
 
+    handlePokemonSelection(stats) {
+    this.selectedPokemonStats = stats;
+    },
+
     fetchData: async function () {
-      // req URL to retrieve companies from backend
-      var reqUrl = 'http://127.0.0.1:5000/companies?category=' + this.categories.selectedValue
+      // req URL to retrieve pokemons from backend
+      var reqUrl = 'http://127.0.0.1:5000/pokemons'
       console.log("ReqURL " + reqUrl)
 
       // await response and data
       const response = await fetch(reqUrl)
       const responseData = await response.json();
 
+      this.scatterPlotData = {x: [], y: [], name: []};
+
       // transform data
-      responseData.forEach((company) => {
-        this.companies.values.push(company.name)
+      responseData.forEach((pokemon) => {
+        this.scatterPlotData.x.push(pokemon.Attack);
+        this.scatterPlotData.y.push(pokemon.Defense);
+        this.pokemons.values.push(pokemon.Name)
       })
     },
+    
   }
 
 
