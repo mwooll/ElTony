@@ -3,22 +3,21 @@
     <v-container fluid>
       <v-row>
         <v-col md="2" class="sideBar">
-            <v-row>
-              <v-col cols="12" sm="12">
-                <div class="control-panel-font">Pokemon Overview</div>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="12" sm="12">
-                <v-select
-                    :items="pokemons.values"
-                    label="Select a Pokemon"
-                    dense
-                    v-model="pokemons.selectedValue"
-                ></v-select>
-
-              </v-col>
-            </v-row>
+          <v-row>
+            <v-col cols="12" sm="12">
+              <div class="control-panel-font">Pokemon Overview</div>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12" sm="12">
+              <v-select
+                  :items="pokemons.values"
+                  label="Select a Pokemon"
+                  dense
+                  v-model="pokemons.selectedValue"
+              ></v-select>
+            </v-col>
+          </v-row>
           <v-row>
             <v-col cols="12" sm="12">
               <div class="control-panel-font">Filters</div>
@@ -27,21 +26,30 @@
           <v-row>
             <v-col cols="12" sm="12">
               <v-select
-                  label="Filter 1"
+                  :items="types.values"
+                  label="Type"
+                  multiple
+                  v-model="filters.type"
               ></v-select>
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="12" sm="12">
               <v-select
-                  label="Filter 2"
+                  :items="legendary.values"
+                  label="Legendary"
+                  dense
+                  v-model="filters.legendary"
               ></v-select>
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="12" sm="12">
               <v-select
-                  label="Filter 3"
+                  :items="colors.values"
+                  label="Color"
+                  multiple
+                  v-model="filters.color"
               ></v-select>
             </v-col>
           </v-row>
@@ -49,13 +57,14 @@
 
         <v-col md="4">
           <ScatterPlot :key="scatterPlotId"
-                        :selectedCategory="categories.selectedValue"
-                        @pokemonSelected="handlePokemonSelection"
+                       :selectedCategory="categories.selectedValue"
+                       @pokemonSelected="handlePokemonSelection"
+                       :data="scatterPlotData"
           />
         </v-col>
         <v-col md="4">
           <SpiderPlot :pokemonStats="selectedPokemonStats"
-                      :series="formattedSeriesForRadarChart"  
+                      :series="formattedSeriesForRadarChart"
           />
         </v-col>
       </v-row>
@@ -75,7 +84,7 @@ export default {
     linePlotId: 0,
     extraPlotId: 0,
     columnWidth: "11",
-    
+
     selectedPokemonStats: {
       hp: 0,
       attack: 0,
@@ -87,24 +96,42 @@ export default {
 
     categories: {
       values: ['all', 'tech', 'health', 'bank'],
-      selectedValue: 'all'
+      selectedValue: 'all',
     },
     companies: {
       values: [],
-      selectedValue: "alphabet"
+      selectedValue: "alphabet",
     },
     algorithm: {
       values: ['none', 'random', 'regression'],
-      selectedValue: 'none'
+      selectedValue: 'none',
     },
     pokemons: {
       values: [],
-      selectedValue: null
+      selectedValue: null,
     },
     year: {
       values: [2017, 2018, 2019, 2020, 2021],
-      selectedValue: 2021
-    }
+      selectedValue: 2021,
+    },
+    filters: {
+      type: [],
+      legendary: null,
+      color: [],
+    },
+    types: {
+      values: ['Normal', 'Fire', 'Water', 'Electric', 'Grass', 'Ice', 'Fighting', 'Poison',
+        'Ground', 'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark',
+        'Steel', 'Fairy' ],
+    },
+    legendary: {
+      values: ['TRUE', 'FALSE'],
+    },
+    colors: {
+      values: ['Black','Blue','Brown','Green', 'Grey','Pink', 'Purple','Red','White','Yellow'],
+    },
+    scatterPlotData: { x: [], y: [], name: [] },
+    filteredData: [],
   }),
 
   mounted() {
@@ -135,12 +162,42 @@ export default {
         this.pokemons.values.push(pokemon.Name)
       })
     },
-    
-  }
 
+    async applyFilters() {
+          // Apply filters and fetch filtered data
+          try {
+            const yourFilterParams = {
+              type: this.filters.type,
+              legendary: this.filters.legendary,
+              color: this.filters.color,
+            };
 
-}
+            const filterResponse = await fetch('http://127.0.0.1:5000/api/filter', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ params: yourFilterParams }),
+            });
+            this.scatterPlotData = {x: [], y: [], name: []};
 
+            filterResponse.forEach((pokemon) => {
+              this.scatterPlotData.x.push(pokemon.Attack);
+              this.scatterPlotData.y.push(pokemon.Defense);
+              this.pokemons.values.push(pokemon.Name)
+            })
+
+            // Update scatter plot with filtered data
+          } catch (error) {
+            console.error('Error applying filters:', error);
+          }
+        },
+
+        updateScatterPlot() {
+      this.fetchData();
+    },
+},
+};
 </script>
 
 <style scoped>
