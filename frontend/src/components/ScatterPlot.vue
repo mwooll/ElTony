@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row align="center" justify="center" class="mt-1 mb-0">
+    <v-row align="center" justify="center" className="mt-1 mb-0">
       <h3>Attacke/Defense </h3>
     </v-row>
     <div style="height: 80vh">
@@ -12,14 +12,15 @@
 
 <script>
 import Plotly from 'plotly.js/dist/plotly';
+
 export default {
   name: 'ScatterPlot',
   props: [
-      'selectedCategory'
+    'selectedCategory'
   ],
 
   watch: {
-    selectedCategory: function() {
+    selectedCategory: function () {
       this.ScatterPlotData.x = [];
       this.ScatterPlotData.y = [];
       this.ScatterPlotData.name = [];
@@ -32,7 +33,18 @@ export default {
 
   data() {
     return {
-      ScatterPlotData: { x: [], y: [], name: [], typeColor: [], hp: [], attack: [], defense: [], spAtk: [], spDef: [], speed: [] },
+      ScatterPlotData: {
+        x: [],
+        y: [],
+        name: [],
+        typeColor: [],
+        hp: [],
+        attack: [],
+        defense: [],
+        spAtk: [],
+        spDef: [],
+        speed: []
+      },
     };
   },
   mounted() {
@@ -41,34 +53,35 @@ export default {
 
   methods: {
     fetchData: async function () {
-  var reqUrl = 'http://127.0.0.1:5000/pokemons';
-  const response = await fetch(reqUrl);
-  const responseData = await response.json();
+      var reqUrl = 'http://127.0.0.1:5000/pokemons';
+      const response = await fetch(reqUrl);
+      const responseData = await response.json();
 
-  this.ScatterPlotData.x = [];
-  this.ScatterPlotData.y = [];
-  this.ScatterPlotData.name = [];
+      this.ScatterPlotData.x = [];
+      this.ScatterPlotData.y = [];
+      this.ScatterPlotData.name = [];
 
-  responseData.forEach((pokemon) => {
-    this.ScatterPlotData.x.push(pokemon.Attack);
-    this.ScatterPlotData.y.push(pokemon.Defense);
-    this.ScatterPlotData.name.push(pokemon.Name);
-    this.ScatterPlotData.typeColor.push(pokemon.TypeColor);
-    this.ScatterPlotData.hp.push(pokemon.HP);
-    this.ScatterPlotData.attack.push(pokemon.Attack);
-    this.ScatterPlotData.defense.push(pokemon.Defense);
-    this.ScatterPlotData.spAtk.push(pokemon.Sp_Atk);
-    this.ScatterPlotData.spDef.push(pokemon.Sp_Def);
-    this.ScatterPlotData.speed.push(pokemon.Speed);
-  });
+      responseData.forEach((pokemon) => {
+        this.ScatterPlotData.x.push(pokemon.Attack);
+        this.ScatterPlotData.y.push(pokemon.Defense);
+        this.ScatterPlotData.name.push(pokemon.Name);
+        this.ScatterPlotData.typeColor.push(pokemon.TypeColor);
+        this.ScatterPlotData.hp.push(pokemon.HP);
+        this.ScatterPlotData.attack.push(pokemon.Attack);
+        this.ScatterPlotData.defense.push(pokemon.Defense);
+        this.ScatterPlotData.spAtk.push(pokemon.Sp_Atk);
+        this.ScatterPlotData.spDef.push(pokemon.Sp_Def);
+        this.ScatterPlotData.speed.push(pokemon.Speed);
+      });
 
-  this.drawScatterPlot();
-},
+      this.drawScatterPlot();
+    },
 
     stylizeMarkers() {
       this.ScatterPlotData.category.forEach((cat) => {
-        this.ScatterPlotData.color.push(this.colors[cat])
-        this.ScatterPlotData.symbol.push(this.symbols[cat])}
+            this.ScatterPlotData.color.push(this.colors[cat])
+            this.ScatterPlotData.symbol.push(this.symbols[cat])
+          }
       )
     },
 
@@ -84,14 +97,14 @@ export default {
         },
         name: "",
         hovertemplate: '<b>%{text}</b>' +
-                        '<br>Attack: %{x}' +
-                        '<br>Defense: %{y}',
+            '<br>Attack: %{x}' +
+            '<br>Defense: %{y}',
         text: this.ScatterPlotData.name, // Name of the Pokemon
       };
       var data = [trace1];
       var layout = {
-        xaxis: { title: "Attack" },
-        yaxis: { title: "Defense" }
+        xaxis: {title: "Attack"},
+        yaxis: {title: "Defense"}
       };
       var config = {
         responsive: true,
@@ -99,10 +112,10 @@ export default {
       };
       Plotly.newPlot('myScatterPlot', data, layout, config);
 
-      document.getElementById('myScatterPlot').on('plotly_click', function(data){
+      document.getElementById('myScatterPlot').on('plotly_click', function (data) {
         var pointIndex = data.points[0].pointIndex;
         this.selectedPokemonStats = {
-          hp: this.ScatterPlotData.hp[pointIndex],   
+          hp: this.ScatterPlotData.hp[pointIndex],
           attack: this.ScatterPlotData.attack[pointIndex],
           defense: this.ScatterPlotData.defense[pointIndex],
           spAtk: this.ScatterPlotData.spAtk[pointIndex],
@@ -113,12 +126,14 @@ export default {
       }.bind(this));
     },
 
-    
+
   }
 }
 </script>
 
 
 <style>
-  body { margin: 0 !important; }
+body {
+  margin: 0 !important;
+}
 </style>

@@ -5,18 +5,39 @@ import pandas as pd
 from flask import Flask, request, jsonify
 from filter import filter_data
 from poke_rec import get_recommendations
+import csv
+import json
+from flask import Flask
+from flask_cors import CORS
+from flask_restx import Resource, Api
+from backend.src.model import Pokemon
+from flask import request
+
+# Configure Flask:
 
 
 app = Flask(__name__)
+# allow access from any frontend
+cors = CORS()
+cors.init_app(app, resources={r"*": {"origins": "*"}})
+api = Api(app)
 
-# Mock data (replace this with your actual data)
+
 pokemon_data = pd.read_csv('pokemon.csv') # Your Pokemon data
+@app.route('/api/filter', methods=['OPTIONS'])
+def handle_options_request():
+    response = jsonify({'status': 'OK'})
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Methods', 'POST')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+    return response
 
 @app.route('/api/filter', methods=['POST'])
 def filter_endpoint():
     try:
         # Get filter parameters from the frontend
         params = request.json['params']
+        print("Received filter parameters:", params)
 
         # Filter data based on received parameters
         """
@@ -28,9 +49,11 @@ def filter_endpoint():
             'color': ['Red', 'Blue']
         }
         """
-        filtered_data = filter_data(params)
-
-        return jsonify({'filtered_data': filtered_data})
+        filtered_data = filter_data(pokemon_data,params)
+        json_filtered_df = jsonify({'filtered_data': filtered_data.to_json(orient='records')})
+        json_data = json.dumps(filtered_data, indent=2)
+        print(json_data)
+        return json_data
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -49,6 +72,38 @@ def recommend_endpoint():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+class PokemonList(Resource):
+    def get(self):
+        # Load Pokémon data from a local CSV file:
+        with open('pokemon.csv', newline='') as f:
+            reader = csv.DictReader(f)
+            data = list(reader)
+
+        # Convert data to Pokemon objects:
+        pokemons = [Pokemon(**{k: v if v != '' else None for k, v in item.items()}) for item in data]
+
+        return [pokemon.to_json() for pokemon in pokemons]
+
+class PokemonResource(Resource):
+    def get(self, name):
+        # Load Pokémon data from a local CSV file:
+        with open('pokemon.csv', newline='') as f:
+            reader = csv.DictReader(f)
+            data = list(reader)
+
+        # Convert data to Pokemon objects:
+        pokemons = [Pokemon(**item) for item in data]
+
+        # Find the Pokémon with the given name:
+        for pokemon in pokemons:
+            if pokemon.Name == name:
+                return pokemon.to_json()
+
+        # If no Pokémon with the given name was found, return an error:
+        return {"error": "Pokémon not found"}, 404
+
+api.add_resource(PokemonList, '/pokemons')
+api.add_resource(PokemonResource, '/pokemons/<string:name>')
 
 
 
