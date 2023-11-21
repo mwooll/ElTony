@@ -112,7 +112,7 @@ export default {
   },
 
   methods: {
-
+    
     handlePokemonSelection(stats) {
     this.selectedPokemonStats = stats;
     },
