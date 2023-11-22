@@ -4,7 +4,6 @@ Filter Dataset according to params set by user
 """
 import pandas as pd
 
-
 def filter_data(dataset, filters):
     # Make a copy of the original dataset
     filtered_data = dataset.copy()
@@ -54,6 +53,5 @@ def filter_data(dataset, filters):
         if color:
             filtered_data = filtered_data[filtered_data['Color'].isin(color)]
 
-    print("filtered")
     json_data = filtered_data.to_json(orient='records')
     return filtered_data,json_data
