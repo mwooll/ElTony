@@ -36,21 +36,10 @@ def filter_endpoint():
         params = request.json['params']
         print("Received filter parameters:", params)
 
-        # Filter data based on received parameters
-        """
-        params for Filter data should look like this
-        filter_params = {
-            'type': ['Fire', 'Water'],
-            'legendary': True,
-            'generation': 3,
-            'color': ['Red', 'Blue']
-        }
-        """
-        filtered_data = filter_data(pokemon_data,params)
-        json_filtered_df = jsonify({'filtered_data': filtered_data.to_json(orient='records')})
-        json_data = json.dumps(filtered_data, indent=2)
-        print(json_data)
-        return json_data
+        # Filter the data
+        filtered_data = filter_data(pokemon_data, params)
+
+        return filtered_data
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500

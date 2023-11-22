@@ -137,11 +137,24 @@ export default {
   mounted() {
     this.fetchData()
   },
+  watch: {
+    // Watch for changes in the filters and update the data
+    filters: {
+      handler(newFilters) {
+        // Do any additional processing if needed
+        console.log('Filters have been updated:', newFilters);
+
+        // Call the function to apply filters when filters are updated
+        this.applyFilters();
+      },
+      deep: true, // This is important for deep watching the properties of the object
+    },
+  },
 
   methods: {
-    
+
     handlePokemonSelection(stats) {
-    this.selectedPokemonStats = stats;
+      this.selectedPokemonStats = stats;
     },
 
     fetchData: async function () {
@@ -164,39 +177,42 @@ export default {
     },
 
     async applyFilters() {
-          // Apply filters and fetch filtered data
-          try {
-            const yourFilterParams = {
-              type: this.filters.type,
-              legendary: this.filters.legendary,
-              color: this.filters.color,
-            };
+      // Apply filters and fetch filtered data
+      try {
 
-            const filterResponse = await fetch('http://127.0.0.1:5000/api/filter', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ params: yourFilterParams }),
-            });
-            this.scatterPlotData = {x: [], y: [], name: []};
 
-            filterResponse.forEach((pokemon) => {
-              this.scatterPlotData.x.push(pokemon.Attack);
-              this.scatterPlotData.y.push(pokemon.Defense);
-              this.pokemons.values.push(pokemon.Name)
-            })
+        const filterResponse = await fetch('http://127.0.0.1:5000/api/filter', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ params: this.filters }),
+        });
 
-            // Update scatter plot with filtered data
-          } catch (error) {
-            console.error('Error applying filters:', error);
-          }
-        },
+        if (!filterResponse.ok) {
+          throw new Error(`HTTP error! Status: ${filterResponse.status}`);
+        }
 
-        updateScatterPlot() {
+        const filteredData = await filterResponse.json();
+
+        this.scatterPlotData = { x: [], y: [], name: [] };
+
+        filteredData.forEach((pokemon) => {
+          this.scatterPlotData.x.push(pokemon.Attack);
+          this.scatterPlotData.y.push(pokemon.Defense);
+          this.pokemons.values.push(pokemon.Name)
+        })
+
+        // Update scatter plot with filtered data
+      } catch (error) {
+        console.error('Error applying filters:', error);
+      }
+    },
+
+    updateScatterPlot() {
       this.fetchData();
     },
-},
+  },
 };
 </script>
 

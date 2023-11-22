@@ -52,4 +52,5 @@ def filter_data(dataset, filters):
             filtered_data = filtered_data[filtered_data['Color'].isin(color)]
 
     print("filtered")
-    return filtered_data
+    json_data = filtered_data.to_json(orient='records')
+    return json_data
