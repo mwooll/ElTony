@@ -94,6 +94,7 @@ export default {
         marker: {
           size: 10,
           color: this.ScatterPlotData.typeColor,
+
         },
         name: "",
         hovertemplate: '<b>%{text}</b>' +
