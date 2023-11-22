@@ -48,7 +48,7 @@ export default {
     };
   },
   mounted() {
-    this.fetchData()
+    setInterval(this.fetchData, 1000);
   },
 
   methods: {

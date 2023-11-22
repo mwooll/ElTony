@@ -36,8 +36,11 @@ def filter_data(dataset, filters):
     # Filter based on legendary status
     if 'legendary' in filters:
         legendary = filters['legendary']
-        if legendary is not None and len(legendary) == 1:
-            filtered_data = filtered_data[filtered_data['isLegendary'] == (legendary[0] == 'TRUE')]
+        if legendary is not None:
+
+            if legendary == "FALSE":
+                # Use only non-legendary Pokemon when legendary is False
+                filtered_data = filtered_data[filtered_data['isLegendary'] == False]
 
     # Filter based on generation
     if 'generation' in filters:
