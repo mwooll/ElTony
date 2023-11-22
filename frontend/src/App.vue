@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-app-bar app color=indigo>
-      <h2>    Pokemon Rec </h2>
+      <h2 class="header1">  Pokemon Rec </h2>
     </v-app-bar>
     <v-main>
       <ConfigurationPanel/>
@@ -27,12 +27,17 @@ export default {
 
 <style>
 /* disable scrolling */
-html {
+html, body {
   scrollbar-width: none; /* For Firefox */
   -ms-overflow-style: none; /* For Internet Explorer and Edge */
+  max-height: 100vh; 
+  overflow-y: hidden;
 }
 html::-webkit-scrollbar {
   width: 0px; /* For Chrome, Safari, and Opera */
+}
+.header1 {
+  margin-left: 0.5cm;
 }
 </style>
 

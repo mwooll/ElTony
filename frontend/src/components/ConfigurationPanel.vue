@@ -2,14 +2,12 @@
   <div>
     <v-container fluid>
       <v-row>
-        <v-col md="2" class="sideBar">
-          <v-row>
-            <v-col cols="12" sm="12">
-              <div class="control-panel-font">Pokemon Overview</div>
+        <!-- Filters column -->
+        <v-col cols="12" md="6" lg="3" class="sideBar">
+          <v-col cols="12" sm="12">
+              <div class="control-panel-font">Filters</div>
             </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12" sm="12">
+          <v-col cols="12" sm="12">
               <v-select
                   :items="pokemons.values"
                   label="Select a Pokemon"
@@ -17,13 +15,6 @@
                   v-model="pokemons.selectedValue"
               ></v-select>
             </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12" sm="12">
-              <div class="control-panel-font">Filters</div>
-            </v-col>
-          </v-row>
-          <v-row>
             <v-col cols="12" sm="12">
               <v-select
                   :items="types.values"
@@ -32,8 +23,6 @@
                   v-model="filters.type"
               ></v-select>
             </v-col>
-          </v-row>
-          <v-row>
             <v-col cols="12" sm="12">
               <v-select
                   :items="legendary.values"
@@ -42,8 +31,6 @@
                   v-model="filters.legendary"
               ></v-select>
             </v-col>
-          </v-row>
-          <v-row>
             <v-col cols="12" sm="12">
               <v-select
                   :items="colors.values"
@@ -52,25 +39,45 @@
                   v-model="filters.color"
               ></v-select>
             </v-col>
-          </v-row>
         </v-col>
 
-        <v-col md="4">
+        <!-- Top left -->
+        <v-col cols="12" md="6" lg="3">
+          
+        </v-col>
+
+        <!-- Top right -->
+        <v-col cols="12" md="6" lg="3">
+          
+        </v-col>
+      </v-row>
+
+      <v-row>
+        <!-- Scatter plot -->
+        <v-col cols="12" md="6" lg="3">
           <ScatterPlot :key="scatterPlotId"
                        :selectedCategory="categories.selectedValue"
                        @pokemonSelected="handlePokemonSelection"
                        :data="scatterPlotData"
           />
         </v-col>
-        <v-col md="4">
+
+        <!--Spider Chart -->
+        <v-col cols="12" md="6" lg="3" class = "spiderchart">
           <SpiderPlot :pokemonStats="selectedPokemonStats"
                       :series="formattedSeriesForRadarChart"
           />
+        </v-col>
+
+        <!-- Bottom right -->
+        <v-col cols="12" md="6" lg="3">
+
         </v-col>
       </v-row>
     </v-container>
   </div>
 </template>
+
 
 <script>
 
@@ -230,6 +237,13 @@ export default {
   border-right: 1px solid rgba(0, 0, 0, 0.1);
   background: #f0f0ffff;
   padding-left: 17px;
-  height: calc(100vh - 72px);
+  height: 40vh;
+}
+
+.spiderchart {
+  justify-content: center;
+  align-items: center;
+  height: calc(50vh);
+  overflow: hidden;
 }
 </style>

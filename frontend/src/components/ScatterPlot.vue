@@ -3,7 +3,7 @@
     <v-row align="center" justify="center" className="mt-1 mb-0">
       <h3>Attacke/Defense </h3>
     </v-row>
-    <div style="height: 80vh">
+    <div style="height: 50vh">
       <div id='myScatterPlot' style="height: inherit"></div>
     </div>
   </div>
@@ -92,7 +92,7 @@ export default {
         mode: 'markers',
         type: 'scatter',
         marker: {
-          size: 10,
+          size: 5,
           color: this.ScatterPlotData.typeColor,
 
         },
