@@ -202,7 +202,7 @@ export default {
           this.scatterPlotData.y.push(pokemon.Defense);
           this.pokemons.values.push(pokemon.Name)
         })
-
+        this.drawScatterPlot();
         // Update scatter plot with filtered data
       } catch (error) {
         console.error('Error applying filters:', error);

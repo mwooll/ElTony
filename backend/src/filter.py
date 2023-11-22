@@ -53,4 +53,4 @@ def filter_data(dataset, filters):
 
     print("filtered")
     json_data = filtered_data.to_json(orient='records')
-    return json_data
+    return filtered_data,json_data

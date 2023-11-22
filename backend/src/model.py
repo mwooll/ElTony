@@ -2,13 +2,15 @@ from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
 from typing import List
 from typing import Optional
+from pydantic import BaseModel
+from typing import Union
 
 
 class Pokemon(BaseModel):
     Number: int
     Name: str
     Type_1: str
-    Type_2: Optional[str]
+    Type_2: Union[str, None]
     TypeColor: Optional[str]
     Total: int
     HP: int
