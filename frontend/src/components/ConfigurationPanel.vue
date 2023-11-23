@@ -54,7 +54,7 @@
 
       <v-row>
         <!-- Scatter plot -->
-        <v-col cols="12" md="6" lg="3">
+        <v-col cols="12" md="6" lg="3" class = "scatterplot">
           <ScatterPlot :key="scatterPlotId"
                        :selectedCategory="categories.selectedValue"
                        @pokemonSelected="handlePokemonSelection"
@@ -237,9 +237,7 @@ export default {
   border-right: 1px solid rgba(0, 0, 0, 0.1);
   background: #f0f0ffff;
   padding-left: 17px;
-  height: 40vh;
 }
-
 .spiderchart {
   justify-content: center;
   align-items: center;

@@ -2,7 +2,7 @@
     <v-row align="center" justify="center" class="mt-1 mb-0">
       <h3> Pokemon Statistics </h3>
     </v-row>
-    <div style="height: 80vh">
+    <div>
     <div id="mySpiderPlot" style="height: inherit"></div>
     </div>
   </template>
@@ -43,3 +43,10 @@
     }
   }
   </script>
+
+<style>
+body {
+  margin: 0 !important;
+}
+
+</style>

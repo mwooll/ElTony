@@ -26,13 +26,7 @@ export default {
 </script>
 
 <style>
-/* disable scrolling */
-html, body {
-  scrollbar-width: none; /* For Firefox */
-  -ms-overflow-style: none; /* For Internet Explorer and Edge */
-  max-height: 100vh; 
-  overflow-y: hidden;
-}
+
 html::-webkit-scrollbar {
   width: 0px; /* For Chrome, Safari, and Opera */
 }
