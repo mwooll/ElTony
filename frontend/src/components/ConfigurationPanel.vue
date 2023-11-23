@@ -262,7 +262,4 @@ export default {
   overflow: hidden;
 }
 
-.filters {
-
-}
 </style>
