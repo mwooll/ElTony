@@ -39,46 +39,29 @@
                   v-model="filters.color"
               ></v-select>
             </v-col>
+          <v-col cols="12" sm="12">
+            <v-select
+                :items="types.values"
+                label="Opponent Team Type"
+                dense
+                v-model="filters.opponentTeamType"
+            ></v-select>
+          </v-col>
         </v-col>
 
         <!-- Top left -->
         <v-col cols="12" md="6" lg="5">
           <v-row>
-            <v-col
-              v-for="n in 6"
-              :key="n"
-              class="d-flex child-flex"
-              cols="4"
-            >
-              <v-img
-                :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
-                :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`"
-                aspect-ratio="1"
-                cover
-                class="bg-grey-lighten-2"
-              >
-                <template v-slot:placeholder>
-                  <v-row
-                    class="fill-height ma-0"
-                    align="center"
-                    justify="center"
-                  >
-                    <v-progress-circular
-                      indeterminate
-                      color="grey-lighten-5"
-                    ></v-progress-circular>
-                  </v-row>
-                </template>
-              </v-img>
+            <v-col>
+              <TeamSection />
+
             </v-col>
           </v-row>
           
         </v-col>
+        <!-- Top middle -->
 
-        <!-- Top right -->
-        <v-col cols="12" md="6" lg="3">
           
-        </v-col>
       </v-row>
 
       <v-row>
@@ -114,9 +97,10 @@
 import ScatterPlot from './ScatterPlot';
 import SpiderPlot from "./RadarChart.vue";
 import SpiderPlotTeam from "./RadarChartTeam.vue"
+import TeamSection from './TeamSection.vue';
 
 export default {
-  components: {ScatterPlot, SpiderPlot, SpiderPlotTeam},
+  components: {ScatterPlot, SpiderPlot, SpiderPlotTeam,TeamSection},
   data: () => ({
     scatterPlotId: 0,
     linePlotId: 0,
@@ -141,6 +125,7 @@ export default {
       type: [],
       legendary: null,
       color: [],
+      opponentTeamType: []
     },
     types: {
       values: ['Normal', 'Fire', 'Water', 'Electric', 'Grass', 'Ice', 'Fighting', 'Poison',
@@ -155,6 +140,7 @@ export default {
     },
     scatterPlotData: { x: [], y: [], name: [] },
     filteredData: [],
+    opponentTeamType: null
   }),
 
   mounted() {
