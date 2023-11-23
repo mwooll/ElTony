@@ -1,9 +1,9 @@
 <template>
     <v-row align="center" justify="center" class="mt-1 mb-0">
-      <h3> Pokemon Comparison</h3>
+      <h3> Team v Team </h3>
     </v-row>
     <div>
-    <div id="mySpiderPlot" style="height: inherit"></div>
+    <div id="mySpiderPlotTeam" style="height: inherit"></div>
     </div>
   </template>
   
@@ -11,7 +11,7 @@
   import Plotly from 'plotly.js/dist/plotly';
   
   export default {
-    name: 'SpiderPlot',
+    name: 'SpiderPlotTeam',
     props: ['pokemonStats'],
     watch: {
       pokemonStats: function(newStats) {
@@ -38,7 +38,7 @@
           showlegend: false
         };
         
-        Plotly.newPlot('mySpiderPlot', data, layout);
+        Plotly.newPlot('mySpiderPlotTeam', data, layout);
       }
     }
   }
