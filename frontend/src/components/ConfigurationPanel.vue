@@ -3,11 +3,11 @@
     <v-container fluid>
       <v-row>
         <!-- Filters column -->
-        <v-col cols="12" md="6" lg="3" class="sideBar">
+        <v-col cols="12" md="6" lg="2" class="sideBar">
           <v-col cols="12" sm="12">
               <div class="control-panel-font">Filters</div>
             </v-col>
-          <v-col cols="12" sm="12">
+          <v-col cols="12" sm="12" class="filters">
               <v-select
                   :items="pokemons.values"
                   label="Select a Pokemon"
@@ -42,7 +42,36 @@
         </v-col>
 
         <!-- Top left -->
-        <v-col cols="12" md="6" lg="3">
+        <v-col cols="12" md="6" lg="5">
+          <v-row>
+            <v-col
+              v-for="n in 6"
+              :key="n"
+              class="d-flex child-flex"
+              cols="4"
+            >
+              <v-img
+                :src="`https://picsum.photos/500/300?image=${n * 5 + 10}`"
+                :lazy-src="`https://picsum.photos/10/6?image=${n * 5 + 10}`"
+                aspect-ratio="1"
+                cover
+                class="bg-grey-lighten-2"
+              >
+                <template v-slot:placeholder>
+                  <v-row
+                    class="fill-height ma-0"
+                    align="center"
+                    justify="center"
+                  >
+                    <v-progress-circular
+                      indeterminate
+                      color="grey-lighten-5"
+                    ></v-progress-circular>
+                  </v-row>
+                </template>
+              </v-img>
+            </v-col>
+          </v-row>
           
         </v-col>
 
@@ -54,16 +83,16 @@
 
       <v-row>
         <!-- Scatter plot -->
-        <v-col cols="12" md="6" lg="3">
+        <v-col cols="12" md="6" lg="4" class = "scatterplot">
           <ScatterPlot :key="scatterPlotId"
-                       :selectedCategory="categories.selectedValue"
+                       :selectedCategory="pokemons.selectedValue"
                        @pokemonSelected="handlePokemonSelection"
                        :data="scatterPlotData"
           />
         </v-col>
 
         <!--Spider Chart -->
-        <v-col cols="12" md="6" lg="3" class = "spiderchart">
+        <v-col cols="12" md="6" lg="4" class = "spiderchart">
           <SpiderPlot :pokemonStats="selectedPokemonStats"
                       :series="formattedSeriesForRadarChart"
           />
@@ -71,7 +100,8 @@
 
         <!-- Bottom right -->
         <v-col cols="12" md="6" lg="3">
-
+          <SpiderPlotTeam 
+          />
         </v-col>
       </v-row>
     </v-container>
@@ -83,9 +113,10 @@
 
 import ScatterPlot from './ScatterPlot';
 import SpiderPlot from "./RadarChart.vue";
+import SpiderPlotTeam from "./RadarChartTeam.vue"
 
 export default {
-  components: {ScatterPlot, SpiderPlot},
+  components: {ScatterPlot, SpiderPlot, SpiderPlotTeam},
   data: () => ({
     scatterPlotId: 0,
     linePlotId: 0,
@@ -101,26 +132,11 @@ export default {
       speed: 0,
     },
 
-    categories: {
-      values: ['all', 'tech', 'health', 'bank'],
-      selectedValue: 'all',
-    },
-    companies: {
-      values: [],
-      selectedValue: "alphabet",
-    },
-    algorithm: {
-      values: ['none', 'random', 'regression'],
-      selectedValue: 'none',
-    },
     pokemons: {
       values: [],
       selectedValue: null,
     },
-    year: {
-      values: [2017, 2018, 2019, 2020, 2021],
-      selectedValue: 2021,
-    },
+    
     filters: {
       type: [],
       legendary: null,
@@ -234,16 +250,16 @@ export default {
   height: 40px;
 }
 .sideBar {
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  border-right: 3px solid #3F51B5;
+  border-bottom: 3px solid #3F51B5;
   background: #f0f0ffff;
-  padding-left: 17px;
-  height: 40vh;
+  padding-left: 0px;
 }
-
 .spiderchart {
   justify-content: center;
   align-items: center;
   height: calc(50vh);
   overflow: hidden;
 }
+
 </style>
