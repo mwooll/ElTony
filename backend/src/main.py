@@ -13,8 +13,7 @@ cors.init_app(app, resources={r"*": {"origins": "*"}})
 api = Api(app)
 
 pokemon_data = pd.read_csv('pokemon.csv')
-
-# Initialize filtered_pokemon_data to an empty DataFrame
+clusterinfo = []  # Initialize clusterinfo to an empty list
 filtered_pokemon_data = pd.DataFrame()
 
 @app.route('/api/filter', methods=['OPTIONS'])
@@ -44,6 +43,7 @@ def filter_endpoint():
             return jsonify({'message': 'No filter applied. Using all data.'})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
 @app.route('/api/recommend', methods=['POST'])
 def recommend_endpoint():
     try:
@@ -57,8 +57,11 @@ def recommend_endpoint():
         data_to_recommend = filtered_pokemon_data if not filtered_pokemon_data.empty else pokemon_data
 
         # Assuming you have a function get_recommendations in poke_rec.py
-        recommendations = get_recommendations(data_to_recommend, opponentType)
+        global clusterinfo  # Use the global variable
+        recommendations, clusterinfo = get_recommendations(data_to_recommend, opponentType)
         print(recommendations)
+        print(clusterinfo)
+        serve_cluster_info()
         return recommendations
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -95,9 +98,8 @@ class PokemonResource(Resource):
 
 @app.route('/cluster-info', methods=['GET'])
 def serve_cluster_info():
-    # Read the saved cluster information and return it as JSON
-    cluster_info = pd.read_csv('cluster_info.csv').to_json(orient='records', default_handler=str)
-    return jsonify(cluster_info)
+    # Return the global clusterinfo variable as JSON
+    return clusterinfo
 
 api.add_resource(PokemonList, '/pokemons')
 api.add_resource(PokemonResource, '/pokemons/<string:name>')

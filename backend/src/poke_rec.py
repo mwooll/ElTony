@@ -141,8 +141,13 @@ def get_recommendations(filtered_dataset, opponent_type):
     pokemon_data['PCA2'] = pca_result[:, 1]
 
     # Save the cluster information to a CSV file
+    cluster_info = pokemon_data[['Name', 'Cluster', 'PCA1', 'PCA2']]
+
+    # Convert the cluster information to JSON format
+    cluster_info_json = cluster_info.to_json(orient='records', default_handler=str, indent=2)
+
     cluster_info_path = 'cluster_info.csv'
     pokemon_data[['Name', 'Cluster', 'PCA1', 'PCA2']].to_csv(cluster_info_path, index=False)
 
     print(recommended_team_json)
-    return recommended_team_json
+    return recommended_team_json,cluster_info_json
