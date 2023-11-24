@@ -49,29 +49,25 @@
               <TeamSection />
 
             </v-col>
+            <v-col cols="12" md="6" lg="3">
+              <ClusterVis  />
+            </v-col>
           </v-row>
 
         </v-col>
         <!-- Top middle -->
-
-
       </v-row>
-
       <v-row>
-        <!-- Scatter plot -->
         <v-col cols="12" md="6" lg="4" class = "scatterplot">
           <ScatterPlot :key="scatterPlotId"
                        :selectedCategory="pokemons.selectedValue"
                        @pokemonSelected="handlePokemonSelection"
                        :data="scatterPlotData"
-          />
-        </v-col>
-
+          /> </v-col>
         <!--Spider Chart -->
         <v-col cols="12" md="6" lg="4" class = "spiderchart">
           <SpiderPlot :pokemonStats="selectedPokemonStats"
-                      :series="formattedSeriesForRadarChart"
-          />
+                      :series="formattedSeriesForRadarChart"  />
         </v-col>
 
         <!-- Bottom right -->
@@ -92,9 +88,10 @@ import ScatterPlot from './ScatterPlot';
 import SpiderPlot from "./RadarChart.vue";
 import SpiderPlotTeam from "./RadarChartTeam.vue"
 import TeamSection from './TeamSection.vue';
+import ClusterVis from './ClusterVis'; // Import ClusterVis component
 
 export default {
-  components: {ScatterPlot, SpiderPlot, SpiderPlotTeam,TeamSection},
+  components: {ScatterPlot, SpiderPlot, SpiderPlotTeam,TeamSection,ClusterVis},
   data: () => ({
     scatterPlotId: 0,
     linePlotId: 0,

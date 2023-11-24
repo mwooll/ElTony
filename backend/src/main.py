@@ -93,6 +93,12 @@ class PokemonResource(Resource):
 
         return {"error": "Pokémon not found"}, 404
 
+@app.route('/cluster-info', methods=['GET'])
+def serve_cluster_info():
+    # Read the saved cluster information and return it as JSON
+    cluster_info = pd.read_csv('cluster_info.csv').to_json(orient='records', default_handler=str)
+    return jsonify(cluster_info)
+
 api.add_resource(PokemonList, '/pokemons')
 api.add_resource(PokemonResource, '/pokemons/<string:name>')
 

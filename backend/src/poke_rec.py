@@ -4,13 +4,21 @@ Recommender for the ideal pokemon team
 return recommendation as well as Key feature for recommendation
 
 """
+import os
+
 import pandas as pd
 from sklearn.cluster import KMeans
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.pipeline import Pipeline
+from sklearn.decomposition import PCA
 
 def get_recommendations(filtered_dataset, opponent_type):
+    cluster_info_path = 'cluster_info.csv'
+
+    # Check if the file exists, and if so, remove it
+    if os.path.exists(cluster_info_path):
+        os.remove(cluster_info_path)
     if opponent_type != "No specific opponent":
         print("opponentType:", opponent_type)
 
@@ -22,9 +30,10 @@ def get_recommendations(filtered_dataset, opponent_type):
 
         # Filter the data for the returned types
         rec_dataset = filtered_dataset[filtered_dataset['Type_1'].isin(recommended_types)]
+        print(rec_dataset)
+
         if len(rec_dataset) > 6:
             # Use the original dataset
-            print("Filtered dataset has less than 6 rows. Using the original dataset.")
             filtered_dataset = rec_dataset
     print(filtered_dataset)
 
@@ -117,5 +126,23 @@ def get_recommendations(filtered_dataset, opponent_type):
     recommended_team = pd.concat(recommended_team, ignore_index=True)
 
     recommended_team_json = recommended_team.to_json(orient='records', default_handler=str)
+    pokemon_data['Cluster'] = pipeline.fit_predict(pokemon_data[features])
+
+    # Sort Pokémon within each cluster by total stats
+    pokemon_data = pokemon_data.sort_values(by=['Cluster'] + numeric_features,
+                                            ascending=[True] + [False] * len(numeric_features))
+
+    # Perform PCA for visualization
+    pca = PCA(n_components=2)
+    pca_result = pca.fit_transform(pokemon_data[numeric_features])
+
+    # Add PCA components to the DataFrame
+    pokemon_data['PCA1'] = pca_result[:, 0]
+    pokemon_data['PCA2'] = pca_result[:, 1]
+
+    # Save the cluster information to a CSV file
+    cluster_info_path = 'cluster_info.csv'
+    pokemon_data[['Name', 'Cluster', 'PCA1', 'PCA2']].to_csv(cluster_info_path, index=False)
+
     print(recommended_team_json)
     return recommended_team_json
