@@ -1,5 +1,15 @@
 <template>
   <v-row>
+    <!-- Dropdown menu for selecting opponent type -->
+    <v-col cols="12">
+      <v-select
+          v-model="opponentType"
+          :items="opponentTypes"
+          label="Select Opponent Type"
+          @input="setOpponentType"
+      ></v-select>
+    </v-col>
+
     <!-- Team images with name and key feature -->
     <v-col v-for="(pokemon, index) in recommendedPokemon" :key="index" cols="2">
       <v-img
@@ -11,6 +21,7 @@
         <!-- Display the name and key feature below the image -->
         <div class="pokemon-details">
           <p>{{ pokemon.Name }}</p>
+          <p>{{ pokemon.Types }}</p>
           <p>{{ pokemon.Key_Feature }}</p>
         </div>
       </v-img>
@@ -24,18 +35,23 @@
 </template>
 
 <script>
-import ConfigurationPanel from "@/components/ConfigurationPanel.vue";
-
 export default {
   data: () => ({
     recommendedPokemon: [],
-    teamImages: [], // Add the teamImages array to store image URLs
+    teamImages: [],
+    opponentType: null, // Default opponent type is null
+    opponentTypes: ['No specific opponent','Normal', 'Fire', 'Water', 'Electric', 'Grass', 'Ice', 'Fighting', 'Poison',
+      'Ground', 'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark',
+      'Steel', 'Fairy' ], // Add your opponent types here
   }),
-  methods: {
+
+    methods: {
+      setOpponentType(opponentTeamType) {
+        this.opponentType = opponentTeamType;
+      },
     async recommendTeam() {
       try {
         // Check if opponentTeamType is selected, if not, set it to 'None'
-        const opponentTeamType = ConfigurationPanel.opponentTeamType || 'None';
 
         // Call the backend to get recommended Pokemon data based on filters or any other logic
         const recommendationResponse = await fetch('http://127.0.0.1:5000/api/recommend', {
@@ -44,7 +60,7 @@ export default {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            opponentType: opponentTeamType,
+            opponentType: this.opponentType,
           }),
         });
 

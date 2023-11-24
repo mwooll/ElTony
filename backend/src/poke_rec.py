@@ -11,29 +11,21 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.pipeline import Pipeline
 
 def get_recommendations(filtered_dataset, opponent_type):
-    if opponent_type != "None":
-        types = opponent_type
-        print("opponentType")
-        if types:
-            # Read in csv with type interactions
-            df_type = pd.read_csv('typing_chart.csv')
+    if opponent_type != "No specific opponent":
+        print("opponentType:", opponent_type)
 
-            # Initialize an empty list to store recommended types
-            recommended_types = []
+        # Read in csv with type interactions
+        df_type = pd.read_csv('typing_chart.csv')
 
-            # Iterate through each selected type
-            for selected_type in types:
-                # Look at the column corresponding to the selected type
-                interaction_column = df_type[selected_type]
+        # Get the recommended types for the specified opponent type
+        recommended_types = df_type.loc[df_type[opponent_type] == 2, 'Types'].tolist()
 
-                # Find types where the column has a value of 2
-                recommended_types.extend(df_type.loc[interaction_column == 2, 'Types'].tolist())
-
-            # Remove duplicates from the recommended types list
-            recommended_types = list(set(recommended_types))
-
-            # Filter the data for the returned types
-            filtered_dataset = filtered_dataset[filtered_dataset['Type_1'].isin(recommended_types)]
+        # Filter the data for the returned types
+        rec_dataset = filtered_dataset[filtered_dataset['Type_1'].isin(recommended_types)]
+        if len(rec_dataset) > 6:
+            # Use the original dataset
+            print("Filtered dataset has less than 6 rows. Using the original dataset.")
+            filtered_dataset = rec_dataset
     print(filtered_dataset)
 
     pokemon_data = filtered_dataset

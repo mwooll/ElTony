@@ -22,16 +22,8 @@ class Pokemon(BaseModel):
     Generation: int
     isLegendary: bool
     Color: str
-    hasGender: bool
-    Pr_Male: Optional[float]
-    Egg_Group_1: str
-    Egg_Group_2: Optional[str]
-    hasMegaEvolution: bool
-    Height_m: float
-    Weight_kg: float
-    Catch_Rate: int
     Body_Style: str
-
+    image: str
     def to_json(self):
         return jsonable_encoder(self, exclude_none=True)
 

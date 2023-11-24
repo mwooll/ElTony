@@ -44,18 +44,22 @@ def filter_endpoint():
             return jsonify({'message': 'No filter applied. Using all data.'})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
 @app.route('/api/recommend', methods=['POST'])
 def recommend_endpoint():
     try:
-        # Get optimization parameters from the frontend
-        optims = request.json['optims']
+        print("Recommend")
 
-        # Get recommendations based on received parameters
-        recommendations = get_recommendations(optims)
+        # Get opponentTeamType from the filter params as opponent type
+        opponentType = request.json['opponentType']
+        print(opponentType)
 
-        return jsonify({'recommendations': recommendations})
+        # Use filtered_pokemon_data if not empty, otherwise use the entire pokemon_data
+        data_to_recommend = filtered_pokemon_data if not filtered_pokemon_data.empty else pokemon_data
 
+        # Assuming you have a function get_recommendations in poke_rec.py
+        recommendations = get_recommendations(data_to_recommend, opponentType)
+        print(recommendations)
+        return recommendations
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

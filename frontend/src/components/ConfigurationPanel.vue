@@ -39,14 +39,7 @@
                   v-model="filters.color"
               ></v-select>
             </v-col>
-          <v-col cols="12" sm="12">
-            <v-select
-                :items="types.values"
-                label="Opponent Team Type"
-                dense
-                v-model="filters.opponentTeamType"
-            ></v-select>
-          </v-col>
+
         </v-col>
 
         <!-- Top left -->
@@ -57,11 +50,11 @@
 
             </v-col>
           </v-row>
-          
+
         </v-col>
         <!-- Top middle -->
 
-          
+
       </v-row>
 
       <v-row>
@@ -83,13 +76,14 @@
 
         <!-- Bottom right -->
         <v-col cols="12" md="6" lg="3">
-          <SpiderPlotTeam 
+          <SpiderPlotTeam
           />
         </v-col>
       </v-row>
     </v-container>
   </div>
 </template>
+
 
 
 <script>
@@ -120,12 +114,11 @@ export default {
       values: [],
       selectedValue: null,
     },
-    
+
     filters: {
       type: [],
       legendary: null,
       color: [],
-      opponentTeamType: []
     },
     types: {
       values: ['Normal', 'Fire', 'Water', 'Electric', 'Grass', 'Ice', 'Fighting', 'Poison',
@@ -140,7 +133,7 @@ export default {
     },
     scatterPlotData: { x: [], y: [], name: [] },
     filteredData: [],
-    opponentTeamType: null
+
   }),
 
   mounted() {
