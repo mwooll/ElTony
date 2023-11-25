@@ -19,9 +19,20 @@ import Plotly from 'plotly.js/dist/plotly';
 
 export default {
   name: 'ScatterPlot',
-  props: [
-    'selectedCategory'
-  ],
+  props: {
+    selectedCategory: {
+      type: String,
+      default: ''
+    },
+
+    isExpanded(newValue) {
+    if (newValue) {
+      this.$nextTick(() => {
+        this.drawScatterPlot(); // Re-render the plot after the dialog opens
+      });
+    }
+  }
+  },
 
   watch: {
     selectedCategory: function () {
@@ -55,10 +66,11 @@ export default {
     setInterval(this.fetchData, 1000);
   },
 
+  
   methods: {
 
     expandPlot() {
-      this.$emit('expandPlot');
+    this.$emit('expandPlotEvent');
     },
 
     fetchData: async function () {

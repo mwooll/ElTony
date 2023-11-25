@@ -11,6 +11,16 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+  <v-dialog v-model="isScatterPlotExpanded" fullscreen>
+    <ScatterPlot
+      :key="scatterPlotId"
+      :selectedCategory="pokemons.selectedValue"
+      @pokemonSelected="handlePokemonSelection"
+      :data="scatterPlotData"
+      :isExpanded="isScatterPlotExpanded"
+    />
+  </v-dialog>
+
   <v-app>
     <v-app-bar app fixed color="indigo" class="app-bar">
       <v-img 
@@ -22,12 +32,13 @@
     </v-app-bar>
     <v-main>
       <SidebarPoke :style="{ marginTop: '80px' }" @toggle-sidebar="handleSidebarToggle" @openDialog="dialog = true"/>
-      <ConfigurationPanel :style="{ marginLeft: '220px', marginTop: '15px' }"/>
+      <ConfigurationPanel :style="{ marginLeft: '220px', marginTop: '15px' }" @expandScatterPlot="handleExpandPlot"/>
       <div class="content" :style="{ 'margin-left': sidebarWidth }">
         <router-view />
       </div>
     </v-main>
   </v-app>
+
 
 </template>
 
@@ -48,12 +59,84 @@ export default {
   data() {
     return {
       dialog: true,
+      isScatterPlotExpanded: false,
+
+      pokemons: {
+        values: [], // Assuming this is an array
+        selectedValue: null, // or a default value
+      },
     };
 
     
   },
 
   methods: {
+    handleExpandPlot() {
+      console.log(this.scatterPlotData); // Check the data being passed
+      this.isScatterPlotExpanded = true;
+    },
+
+    handlePokemonSelection(stats) {
+      this.selectedPokemonStats = stats;
+    },
+    handleClusterSelection(stats) {
+      this.selectedClusterStats = stats;
+    },
+    fetchData: async function () {
+      // req URL to retrieve pokemons from backend
+      var reqUrl = 'http://127.0.0.1:5000/pokemons'
+      console.log("ReqURL " + reqUrl)
+
+      // await response and data
+      const response = await fetch(reqUrl)
+      const responseData = await response.json();
+
+      this.scatterPlotData = {x: [], y: [], name: []};
+
+      // transform data
+      responseData.forEach((pokemon) => {
+        this.scatterPlotData.x.push(pokemon.Attack);
+        this.scatterPlotData.y.push(pokemon.Defense);
+        this.pokemons.values.push(pokemon.Name)
+      })
+    },
+
+    async applyFilters() {
+      // Apply filters and fetch filtered data
+      try {
+
+
+        const filterResponse = await fetch('http://127.0.0.1:5000/api/filter', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ params: this.filters }),
+        });
+
+        if (!filterResponse.ok) {
+          throw new Error(`HTTP error! Status: ${filterResponse.status}`);
+        }
+
+        const filteredData = await filterResponse.json();
+
+        this.scatterPlotData = { x: [], y: [], name: [] };
+
+        filteredData.forEach((pokemon) => {
+          this.scatterPlotData.x.push(pokemon.Attack);
+          this.scatterPlotData.y.push(pokemon.Defense);
+          this.pokemons.values.push(pokemon.Name)
+        })
+        this.drawScatterPlot();
+        // Update scatter plot with filtered data
+      } catch (error) {
+        console.error('Error applying filters:', error);
+      }
+    },
+
+    updateScatterPlot() {
+      this.fetchData();
+    },
   },
 }
 </script>

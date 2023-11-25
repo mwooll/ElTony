@@ -152,7 +152,7 @@ export default {
 }
 
 .image-container {
-  width: 160px; /* Adjust width as needed */
+  width: 140px; /* Adjust width as needed */
   height: auto; /* Height will adjust to maintain aspect ratio */
   margin: auto;
 }

@@ -1,15 +1,15 @@
 <template>
-    <v-row align="center" justify="center" class="mt-1 mb-0">
+    <v-row align="center" justify="center" class="mt-1" style="margin-bottom: 10px;">
       <h3> Pokemon Comparison</h3>
     </v-row>
     <v-row align="center" justify="center" class="mt-1 mb-0">
       <p>{{ pokemonStats.name }}</p>
      </v-row>
-  <v-row align="center" justify="center" class="mt-1 mb-0">
+  <v-row align="center" justify="center" class="mt-1 mb-0" >
     <p>{{ clusterStats.name }}</p>
   </v-row>
     <div>
-    <div id="mySpiderPlot" style="height: inherit"></div>
+    <div id="mySpiderPlot" style="width: 100%; height: 150%;"></div>
     </div>
   </template>
 
@@ -29,6 +29,11 @@
         this.drawSpiderPlot(this.pokemonStats, newCluster);
       },
     },
+
+    mounted() {
+    this.drawSpiderPlot(this.pokemonStats, this.clusterStats);
+    },
+
     methods: {
       drawSpiderPlot(stats, clusterStats) {
         // Check if both sets of stats are available
@@ -62,7 +67,14 @@
               range: [0, 250],
             },
           },
-          showlegend: true, // Show legend to distinguish between the two traces
+          showlegend: true,
+          legend: {
+            orientation: "h", // Set legend orientation to horizontal
+            x: 0.5, // Center the legend horizontally
+            xanchor: "center",
+            y: -0.2, // Position the legend below the chart
+            yanchor: "bottom"
+          },      
         };
 
         Plotly.newPlot('mySpiderPlot', data, layout);

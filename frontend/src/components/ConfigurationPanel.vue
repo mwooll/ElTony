@@ -33,7 +33,7 @@
                        :selectedCategory="pokemons.selectedValue"
                        @pokemonSelected="handlePokemonSelection"
                        :data="scatterPlotData"
-                       @expandPlot="showFullPagePlot"
+                       @expandPlotEvent="handleExpandPlot"
           /> </v-col>
         <!--Spider Chart -->
         <v-col cols="12" md="6" lg="4" class = "columns">
@@ -45,6 +45,7 @@
 
         <!-- Bottom right -->
         <v-col cols="12" md="6" lg="4" class="columns">
+          
           <SpiderPlotTeam
           />
         </v-col>
@@ -132,6 +133,11 @@ export default {
 
   methods: {
 
+    handleExpandPlot() {
+    // You can emit another event that App.vue will listen to
+    this.$emit('expandScatterPlot');
+    
+  },
     showFullPagePlot() {
     },
 
