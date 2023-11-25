@@ -3,14 +3,14 @@
     <v-container fluid>
       <v-row>
         <!-- Top left -->
-        <v-col cols="12" md="6" lg="5">
+        <v-col cols="12" md="6" lg="8" style="height: 500px;">
           <v-row>
             <v-col>
               <TeamSection />
 
             </v-col>
 
-            <v-col cols="12" md="6" lg="3">
+            <v-col cols="12" md="6" lg="3" style="height: 500px;">
               <ClusterVis
                   :key="PCAScatter"
                   :selectedCategory="pokemons.selectedValue"
@@ -50,9 +50,7 @@
 </template>
 
 
-
 <script>
-
 import ScatterPlot from './ScatterPlot';
 import SpiderPlot from "./RadarChart.vue";
 import SpiderPlotTeam from "./RadarChartTeam.vue"

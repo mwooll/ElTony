@@ -10,14 +10,6 @@
       </span>
         <span v-else> 
           <v-col cols="12" sm="12" class="filters">
-              <v-select
-                  label="Select a Pokemon"
-              ></v-select>
-            </v-col> </span>
-      <span v-if="collapsed">
-      </span>
-        <span v-else> 
-          <v-col cols="12" sm="12" class="filters">
             <v-select
                   :items="types.values"
                   label="Type"
@@ -50,7 +42,13 @@
               ></v-select>
             </v-col> 
       </span>
-
+      <span v-if="collapsed">
+      </span>
+      <span v-else> 
+      <v-btn color="primary" @click="resetFilters" class="button">Reset Filters
+      </v-btn>
+      </span>
+      
       <span
         class="collapse-icon"
         :class="{ 'rotate-180': collapsed }"
@@ -140,6 +138,17 @@ export default {
 
   methods: {
 
+    resetFilters() {
+            // Resetting each filter to its default value
+            this.filters.type = [];
+            this.filters.legendary = null;
+            this.filters.color = [];
+            // Add any other filters you need to reset
+
+            // Optionally, you can also update the filtered data
+            this.applyFilters();
+    },
+
     handlePokemonSelection(stats) {
       this.selectedPokemonStats = stats;
     },
@@ -208,8 +217,6 @@ export default {
 <style>
 :root {
     --sidebar-bg-color: #3F51B5;
-    --sidebar-item-hover: #000000;
-    --sidebar-item-active: #000000;
 }
 
 .sidebar {
@@ -223,6 +230,7 @@ export default {
   left: 0;
   bottom: 0;
   padding: 0.5em;
+  text-align: center;
 
   transition: 0.3s ease;
 
@@ -245,4 +253,11 @@ export default {
   transition: 0.2s linear;
 }
 
+.filters {
+  position: center;
+}
+
+.button {
+  margin-top: 10px
+}
 </style>
