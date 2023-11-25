@@ -52,13 +52,9 @@
       </span>
       <span v-else> 
       <v-btn
-        fixed
-        bottom
-        right
-        fab
-        dark
         color="indigo"
-        @click="dialog = true"
+        @click="openDialog"
+        class="help"
       >
         <v-icon>mdi-help-circle</v-icon>
       </v-btn>
@@ -152,6 +148,10 @@ export default {
   },
 
   methods: {
+
+    openDialog() {
+    this.$emit('openDialog');
+    },
 
     resetFilters() {
             // Resetting each filter to its default value
@@ -275,5 +275,15 @@ export default {
 
 .button {
   margin-top: 10px
+}
+
+.help{
+  cursor: pointer;
+  color: indigo; /* Or any color you prefer */
+  font-size: 28px; 
+  position: fixed; 
+  bottom: 20px; 
+  right: 20px; 
+  
 }
 </style>

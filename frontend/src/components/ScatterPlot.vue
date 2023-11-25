@@ -1,12 +1,16 @@
 <template>
-  <div>
+  <div style="width: 100%; height: 100%;">
+    <v-btn icon class="expand-button" @click="expandPlot">
+      <v-icon>mdi-fullscreen</v-icon>
+    </v-btn>
     <v-row align="center" justify="center" className="mt-1 mb-0">
       <h3 align="center"> Attack/Defense </h3>
     </v-row>
     <div style="height: 50vh">
-      <div id='myScatterPlot' style="height: inherit"></div>
+      <div id="myScatterPlot" style="width: 100%; height: 100%;"></div>
     </div>
   </div>
+
 </template>
 
 
@@ -52,6 +56,11 @@ export default {
   },
 
   methods: {
+
+    expandPlot() {
+      this.$emit('expandPlot');
+    },
+
     fetchData: async function () {
       var reqUrl = 'http://127.0.0.1:5000/pokemons';
       const response = await fetch(reqUrl);
@@ -104,8 +113,14 @@ export default {
       };
       var data = [trace1];
       var layout = {
-        xaxis: {title: "Attack"},
-        yaxis: {title: "Defense"}
+        xaxis: {
+          title: "Attack",
+          showgrid: false,
+        },
+        yaxis: {
+          title: "Defense",
+          showgrid: false,  
+        }
       };
       var config = {
         responsive: true,
@@ -144,4 +159,11 @@ h3 {
   color: indigo
   
 }
+
+.expand-button {
+  top: 0;
+  right: 0;
+  z-index: 10; /* Ensure it's above the plot */
+}
+
 </style>

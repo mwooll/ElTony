@@ -1,9 +1,9 @@
 <template>
   <v-dialog v-model="dialog" persistent>
       <v-card>
-        <v-card-title>Welcome</v-card-title>
-        <v-card-text>
-          This is your welcome message or any other content you want to display in the popup.
+        <v-card-title align="center">Welcome to our Pokemon Recommentation Dashboard</v-card-title>
+        <v-card-text align="center">
+          The dashboard consists of 5 components
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -21,7 +21,7 @@
       </v-img>
     </v-app-bar>
     <v-main>
-      <SidebarPoke :style="{ marginTop: '80px' }" @toggle-sidebar="handleSidebarToggle"/>
+      <SidebarPoke :style="{ marginTop: '80px' }" @toggle-sidebar="handleSidebarToggle" @openDialog="dialog = true"/>
       <ConfigurationPanel :style="{ marginLeft: '220px', marginTop: '15px' }"/>
       <div class="content" :style="{ 'margin-left': sidebarWidth }">
         <router-view />

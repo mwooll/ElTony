@@ -14,7 +14,7 @@
 
         </v-col>
         <!-- Top middle -->
-        <v-col cols="12" md="6" lg="4" style="height: 500px;" class="columns" >
+        <v-col cols="12" md="6" lg="4" class="columns" >
           <v-row>
             <v-col>
               <ClusterVis
@@ -33,6 +33,7 @@
                        :selectedCategory="pokemons.selectedValue"
                        @pokemonSelected="handlePokemonSelection"
                        :data="scatterPlotData"
+                       @expandPlot="showFullPagePlot"
           /> </v-col>
         <!--Spider Chart -->
         <v-col cols="12" md="6" lg="4" class = "columns">
@@ -130,6 +131,9 @@ export default {
   },
 
   methods: {
+
+    showFullPagePlot() {
+    },
 
     handlePokemonSelection(stats) {
       this.selectedPokemonStats = stats;
