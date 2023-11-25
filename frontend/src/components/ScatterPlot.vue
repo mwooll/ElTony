@@ -116,6 +116,7 @@ export default {
       document.getElementById('myScatterPlot').on('plotly_click', function (data) {
         var pointIndex = data.points[0].pointIndex;
         this.selectedPokemonStats = {
+          name: this.ScatterPlotData.name[pointIndex],
           hp: this.ScatterPlotData.hp[pointIndex],
           attack: this.ScatterPlotData.attack[pointIndex],
           defense: this.ScatterPlotData.defense[pointIndex],

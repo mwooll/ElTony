@@ -51,7 +51,12 @@
             </v-col>
 
             <v-col cols="12" md="6" lg="3">
-              <ClusterVis />
+              <ClusterVis
+                  :key="PCAScatter"
+                  :selectedCategory="pokemons.selectedValue"
+                  @pokemonSelectedCluster="handleClusterSelection"
+                  :data="scatterPlotData"
+              />
             </v-col>
 
           </v-row>
@@ -69,7 +74,9 @@
         <!--Spider Chart -->
         <v-col cols="12" md="6" lg="4" class = "spiderchart">
           <SpiderPlot :pokemonStats="selectedPokemonStats"
-                      :series="formattedSeriesForRadarChart"  />
+                      :cluster-stats="selectedClusterStats"
+                      :series="formattedSeriesForRadarChart"
+                      />
         </v-col>
 
         <!-- Bottom right -->
@@ -101,6 +108,7 @@ export default {
     columnWidth: "11",
 
     selectedPokemonStats: {
+
       hp: 0,
       attack: 0,
       defense: 0,
@@ -108,7 +116,15 @@ export default {
       spDef: 0,
       speed: 0,
     },
-
+    selectedClusterStats: {
+      name:0,
+      hp: 0,
+      attack: 0,
+      defense: 0,
+      spAtk: 0,
+      spDef: 0,
+      speed: 0,
+    },
     pokemons: {
       values: [],
       selectedValue: null,
@@ -157,7 +173,9 @@ export default {
     handlePokemonSelection(stats) {
       this.selectedPokemonStats = stats;
     },
-
+    handleClusterSelection(stats) {
+      this.selectedClusterStats = stats;
+    },
     fetchData: async function () {
       // req URL to retrieve pokemons from backend
       var reqUrl = 'http://127.0.0.1:5000/pokemons'

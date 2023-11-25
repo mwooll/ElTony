@@ -7,6 +7,7 @@
   </div>
 </template>
 
+
 <script>
 import Plotly from 'plotly.js-dist';
 
@@ -42,7 +43,6 @@ export default {
   methods: {
     fetchData: async function () {
       try {
-        // Replace the URL with your actual endpoint
         var reqUrl = 'http://127.0.0.1:5000/cluster-info';
         const response = await fetch(reqUrl);
         const responseData = await response.json();
@@ -58,7 +58,6 @@ export default {
           this.clusterInfo.typeColor.push(pokemon.Cluster);
         });
 
-        // Render the scatter plot with the fetched data
         this.drawScatterPCA();
       } catch (error) {
         console.error('Error fetching cluster information:', error);
@@ -84,12 +83,11 @@ export default {
 
       const data = [trace1];
       const layout = {
-        width: 400, // Set the desired width
+        width: 400,
         height: 400,
         xaxis: {
           title: 'PCA1',
           aspectratio: {
-            // Set the aspect ratio to make it quadratic
             x: 1,
             y: 1,
           },
@@ -97,7 +95,6 @@ export default {
         yaxis: {
           title: 'PCA2',
           aspectratio: {
-            // Set the aspect ratio to make it quadratic
             x: 1,
             y: 1,
           },
@@ -109,17 +106,28 @@ export default {
       };
 
       Plotly.newPlot('PCAScatter', data, layout, config);
-
-      document.getElementById('PCAScatter').on('plotly_click', (data) => {
+      document.getElementById('PCAScatter').on('plotly_click', async (data) => {
         const pointIndex = data.points[0].pointIndex;
-        const selectedPokemonStats = {
-          name: this.clusterInfo.name[pointIndex],
-          cluster: this.clusterInfo.typeColor[pointIndex],
-          pca1: this.clusterInfo.x[pointIndex],
-          pca2: this.clusterInfo.y[pointIndex],
-        };
-        // Do something with selectedPokemonStats
-        console.log('Selected Pokemon Stats:', selectedPokemonStats);
+        const selectedPokemonName = this.clusterInfo.name[pointIndex];
+
+        try {
+          const response = await fetch(`http://127.0.0.1:5000/pokemon/${selectedPokemonName}`);
+          const additionalStats = await response.json();
+
+          this.$set(this.clusterData, selectedPokemonName, {
+            name: additionalStats.name,
+            hp: additionalStats.hp,
+            attack: additionalStats.attack,
+            defense: additionalStats.defense,
+            spAtk: additionalStats.spAtk,
+            spDef: additionalStats.spDef,
+            speed: additionalStats.speed,
+          });
+
+          this.$emit('pokemonSelectedCluster', selectedPokemonName);
+        } catch (error) {
+          console.error('Error fetching additional Pokemon data:', error);
+        }
       });
     },
   },
