@@ -1,66 +1,76 @@
 <template>
-  <div>
-    <v-container fluid>
-      <v-row>
-        <!-- Top left -->
-        <v-col cols="12" md="6" lg="5">
-          <v-row>
-            <v-col>
-              <TeamSection />
+    <div class="sidebar" :style="{ width: sidebarWidth }">
+      <h1>
+        <span v-if="collapsed">
+          <i class="fa-solid fa-filter"></i>
+        </span>
+        <span v-else> Filters </span>
+      </h1>  
+      <span v-if="collapsed">
+      </span>
+        <span v-else> 
+          <v-col cols="12" sm="12" class="filters">
+              <v-select
+                  label="Select a Pokemon"
+              ></v-select>
+            </v-col> </span>
+      <span v-if="collapsed">
+      </span>
+        <span v-else> 
+          <v-col cols="12" sm="12" class="filters">
+            <v-select
+                  :items="types.values"
+                  label="Type"
+                  multiple
+                  v-model="filters.type"
+              ></v-select>
+            </v-col> 
+      </span>
+      <span v-if="collapsed">
+      </span>
+        <span v-else> 
+          <v-col cols="12" sm="12" class="filters">
+            <v-select
+                  :items="legendary.values"
+                  label="Legendary"
+                  dense
+                  v-model="filters.legendary"
+              ></v-select>
+            </v-col> 
+      </span>
+      <span v-if="collapsed">
+      </span>
+        <span v-else> 
+          <v-col cols="12" sm="12" class="filters">
+            <v-select
+                  :items="colors.values"
+                  label="Color"
+                  multiple
+                  v-model="filters.color"
+              ></v-select>
+            </v-col> 
+      </span>
 
-            </v-col>
+      <span
+        class="collapse-icon"
+        :class="{ 'rotate-180': collapsed }"
+        @click="toggleSidebar"
+        >
+        <i class="fas fa-angle-double-left" />
+        </span>
+    </div>
 
-            <v-col cols="12" md="6" lg="3">
-              <ClusterVis
-                  :key="PCAScatter"
-                  :selectedCategory="pokemons.selectedValue"
-                  @pokemonSelectedCluster="handleClusterSelection"
-                  :data="scatterPlotData"
-              />
-            </v-col>
-
-          </v-row>
-
-        </v-col>
-        <!-- Top middle -->
-      </v-row>
-      <v-row>
-        <v-col cols="12" md="6" lg="4" class = "scatterplot">
-          <ScatterPlot :key="scatterPlotId"
-                       :selectedCategory="pokemons.selectedValue"
-                       @pokemonSelected="handlePokemonSelection"
-                       :data="scatterPlotData"
-          /> </v-col>
-        <!--Spider Chart -->
-        <v-col cols="12" md="6" lg="4" class = "spiderchart">
-          <SpiderPlot :pokemonStats="selectedPokemonStats"
-                      :cluster-stats="selectedClusterStats"
-                      :series="formattedSeriesForRadarChart"
-                      />
-        </v-col>
-
-        <!-- Bottom right -->
-        <v-col cols="12" md="6" lg="3">
-          <SpiderPlotTeam
-          />
-        </v-col>
-      </v-row>
-    </v-container>
-  </div>
 </template>
 
-
-
 <script>
-
-import ScatterPlot from './ScatterPlot';
-import SpiderPlot from "./RadarChart.vue";
-import SpiderPlotTeam from "./RadarChartTeam.vue"
-import TeamSection from './TeamSection.vue';
-import ClusterVis from './ClusterVis'; // Import ClusterVis component
+import { collapsed, toggleSidebar, sidebarWidth } from './state'
 
 export default {
-  components: {ScatterPlot, SpiderPlot, SpiderPlotTeam,TeamSection,ClusterVis},
+  props: {},
+  components: { },
+  setup() {
+    return { collapsed, toggleSidebar, sidebarWidth }
+  },
   data: () => ({
     scatterPlotId: 0,
     linePlotId: 0,
@@ -192,30 +202,47 @@ export default {
       this.fetchData();
     },
   },
-};
+}
 </script>
 
-<style scoped>
-.control-panel-font {
-  font-family: "Open Sans", verdana, arial, sans-serif;
-  align-items: center;
-  font-size: 15px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+<style>
+:root {
+    --sidebar-bg-color: #3F51B5;
+    --sidebar-item-hover: #000000;
+    --sidebar-item-active: #000000;
+}
+
+.sidebar {
+  color: white;
+  background-color: var(--sidebar-bg-color);
+
+  float: left;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  padding: 0.5em;
+
+  transition: 0.3s ease;
+
   display: flex;
-  font-weight: 500;
-  height: 40px;
+  flex-direction: column;
 }
-.sideBar {
-  border-right: 3px solid #3F51B5;
-  border-bottom: 3px solid #3F51B5;
-  background: #f0f0ffff;
-  padding-left: 0px;
+
+.collapse-icon {
+  position: absolute;
+  bottom: 0;
+  padding: 0.75em;
+
+  color: rgba(255, 255, 255, 0.7);
+
+  transition: 0.2s linear;
 }
-.spiderchart {
-  justify-content: center;
-  align-items: center;
-  height: calc(50vh);
-  overflow: hidden;
+
+.rotate-180 {
+  transform: rotate(180deg);
+  transition: 0.2s linear;
 }
 
 </style>
