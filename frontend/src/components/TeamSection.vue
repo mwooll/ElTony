@@ -29,7 +29,7 @@
 
     <!-- Recommend Team Button -->
     <v-col cols="12">
-      <v-btn @click="recommendTeam" color="primary">Recommend Team</v-btn>
+      <v-btn @click="recommendTeam" color="yellow">Recommend Team</v-btn>
     </v-col>
   </v-row>
 </template>

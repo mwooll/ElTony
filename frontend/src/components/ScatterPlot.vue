@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row align="center" justify="center" className="mt-1 mb-0">
-      <h3> Attack/Defense </h3>
+      <h3 align="center"> Attack/Defense </h3>
     </v-row>
     <div style="height: 50vh">
       <div id='myScatterPlot' style="height: inherit"></div>
@@ -139,7 +139,8 @@ body {
   margin: 0 !important;
 }
 
-.mt-1 {
-  align-items: center
+h3 {
+  color: indigo
+  
 }
 </style>

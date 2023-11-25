@@ -1,10 +1,10 @@
 <template>
     <div class="sidebar" :style="{ width: sidebarWidth }">
       <h1>
-        <span v-if="collapsed">
+        <span v-if="collapsed" @click="toggleSidebar">
           <i class="fa-solid fa-filter"></i>
         </span>
-        <span v-else> Filters </span>
+        <span v-else > Filters </span>
       </h1>  
       <span v-if="collapsed">
       </span>
@@ -45,7 +45,7 @@
       <span v-if="collapsed">
       </span>
       <span v-else> 
-      <v-btn color="primary" @click="resetFilters" class="button">Reset Filters
+      <v-btn color="yellow" @click="resetFilters" class="button">Reset Filters
       </v-btn>
       </span>
       
@@ -255,6 +255,7 @@ export default {
 
 .filters {
   position: center;
+  margin-bottom: -20px;
 }
 
 .button {

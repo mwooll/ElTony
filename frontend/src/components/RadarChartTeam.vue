@@ -1,6 +1,6 @@
 <template>
   <v-row align="center" justify="center" className="mt-1 mb-0">
-    <h3>Team Stats</h3>
+    <h3 align = "center">Team Stats</h3>
   </v-row>
   <div>
     <div id="mySpiderPlotTeam" style="height: inherit"></div>

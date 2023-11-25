@@ -10,7 +10,7 @@
     </v-app-bar>
     <v-main>
       <SidebarPoke :style="{ marginTop: '80px' }" @toggle-sidebar="handleSidebarToggle"/>
-      <ConfigurationPanel :style="{ marginLeft: '180px', marginTop: '15px' }"/>
+      <ConfigurationPanel :style="{ marginLeft: '220px', marginTop: '15px' }"/>
       <div class="content" :style="{ 'margin-left': sidebarWidth }">
         <router-view />
       </div>
@@ -57,7 +57,7 @@ html::-webkit-scrollbar {
 .sidebar {
     position: absolute;
     left: 0;
-    width: 200px; /* Example width */
+    width: 220px; /* Example width */
   }
 
   .main-content {

@@ -1,16 +1,22 @@
 <template>
   <div>
-    <v-container fluid>
-      <v-row>
+    <v-container fluid class='container'>
+      <v-row class="rows">
         <!-- Top left -->
-        <v-col cols="12" md="6" lg="8" style="height: 500px;">
+        <v-col cols="12" md="6" lg="8" style="height: 500px;" class="columns">
           <v-row>
             <v-col>
               <TeamSection />
 
             </v-col>
 
-            <v-col cols="12" md="6" lg="3" style="height: 500px;">
+          </v-row>
+
+        </v-col>
+        <!-- Top middle -->
+        <v-col cols="12" md="6" lg="4" style="height: 500px;" class="columns" >
+          <v-row>
+            <v-col>
               <ClusterVis
                   :key="PCAScatter"
                   :selectedCategory="pokemons.selectedValue"
@@ -18,21 +24,18 @@
                   :data="scatterPlotData"
               />
             </v-col>
-
           </v-row>
-
         </v-col>
-        <!-- Top middle -->
       </v-row>
-      <v-row>
-        <v-col cols="12" md="6" lg="4" class = "scatterplot">
+      <v-row class="rows">
+        <v-col cols="12" md="6" lg="4" class = "columns">
           <ScatterPlot :key="scatterPlotId"
                        :selectedCategory="pokemons.selectedValue"
                        @pokemonSelected="handlePokemonSelection"
                        :data="scatterPlotData"
           /> </v-col>
         <!--Spider Chart -->
-        <v-col cols="12" md="6" lg="4" class = "spiderchart">
+        <v-col cols="12" md="6" lg="4" class = "columns">
           <SpiderPlot :pokemonStats="selectedPokemonStats"
                       :cluster-stats="selectedClusterStats"
                       :series="formattedSeriesForRadarChart"
@@ -40,7 +43,7 @@
         </v-col>
 
         <!-- Bottom right -->
-        <v-col cols="12" md="6" lg="3">
+        <v-col cols="12" md="6" lg="4" class="columns">
           <SpiderPlotTeam
           />
         </v-col>
@@ -209,11 +212,14 @@ export default {
   background: #f0f0ffff;
   padding-left: 0px;
 }
-.spiderchart {
+
+
+.columns {
+  border: 1px solid indigo;
   justify-content: center;
   align-items: center;
-  height: calc(50vh);
   overflow: hidden;
 }
+
 
 </style>
