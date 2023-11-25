@@ -40,7 +40,7 @@ export default {
     recommendedPokemon: [],
     teamImages: [],
     opponentType: null, // Default opponent type is null
-    opponentTypes: ['No specific opponent','Normal' , 'Fire', 'Water', 'Electric', 'Grass', 'Ice', 'Fighting', 'Poison',
+    opponentTypes: ['No specific opponent', 'Fire','Normal', 'Water', 'Electric', 'Grass', 'Ice', 'Fighting', 'Poison',
       'Ground', 'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark',
       'Steel', 'Fairy' ], // Add your opponent types here
   }),

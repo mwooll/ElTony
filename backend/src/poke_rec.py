@@ -19,17 +19,15 @@ def get_recommendations(filtered_dataset, opponent_type):
     # Check if the file exists, and if so, remove it
     if os.path.exists(cluster_info_path):
         os.remove(cluster_info_path)
-    if opponent_type != "No specific opponent":
-        print("opponentType:", opponent_type)
 
-        # Read in csv with type interactions
+    if opponent_type != "No specific opponent":
         df_type = pd.read_csv('typing_chart.csv')
 
-        # Get the recommended types for the specified opponent type
         recommended_types = df_type.loc[df_type[opponent_type] == 2, 'Types'].tolist()
 
         # Filter the data for the returned types
-        rec_dataset = filtered_dataset[filtered_dataset['Type_1'].isin(recommended_types)]
+        rec_dataset = filtered_dataset[
+            filtered_dataset['Type_1'].isin(recommended_types) | filtered_dataset['Type_2'].isin(recommended_types)]
         print(rec_dataset)
 
         if len(rec_dataset) > 6:
