@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <!-- Dropdown menu for selecting opponent type -->
-    <v-col cols="12">
+    <v-col cols="12" class="typeselection">
       <v-select
           v-model="opponentType"
           :items="opponentTypes"
@@ -26,7 +26,35 @@
         </div>
       </v-img>
     </v-col>
-
+    <v-col
+      v-for="(photo, index) in photos"
+      :key="index"
+      class="d-flex child-flex"
+      cols="4"
+    >
+    <div class="image-container">
+      <v-img
+        class="custom-image"
+        :src="photo"
+        :lazy-src="photo"
+        aspect-ratio="1"
+        cover
+      >
+        <template v-slot:placeholder>
+          <v-row
+            class="fill-height ma-0"
+            align="center"
+            justify="center"
+          >
+            <v-progress-circular
+              indeterminate
+              color="grey-lighten-5"
+            ></v-progress-circular>
+          </v-row>
+        </template>
+      </v-img>
+    </div>
+    </v-col>
     <!-- Recommend Team Button -->
     <v-col cols="12">
       <v-btn @click="recommendTeam" color="yellow">Recommend Team</v-btn>
@@ -36,14 +64,24 @@
 
 <script>
 export default {
-  data: () => ({
-    recommendedPokemon: [],
-    teamImages: [],
-    opponentType: null, // Default opponent type is null
-    opponentTypes: ['No specific opponent', 'Fire','Normal', 'Water', 'Electric', 'Grass', 'Ice', 'Fighting', 'Poison',
-      'Ground', 'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark',
-      'Steel', 'Fairy' ], // Add your opponent types here
-  }),
+  data() {
+    return {
+      photos: [
+        require('@/assets/1.png'),
+        require('@/assets/2.png'),
+        require('@/assets/3.png'),
+        require('@/assets/4.png'),
+        require('@/assets/5.png'),
+        require('@/assets/6.png'),
+      ],
+      recommendedPokemon: [],
+      teamImages: [],
+      opponentType: null, // Default opponent type is null
+      opponentTypes: ['No specific opponent', 'Fire','Normal', 'Water', 'Electric', 'Grass', 'Ice', 'Fighting', 'Poison',
+        'Ground', 'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark',
+        'Steel', 'Fairy' ], // Add your opponent types here
+    };
+  },
 
     methods: {
       setOpponentType(opponentTeamType) {
@@ -92,6 +130,8 @@ export default {
         pokemon.image = imageUrl;
       }
     },
+
+    
   },
 };
 </script>
@@ -109,5 +149,14 @@ export default {
   background-color: rgba(255, 255, 255, 0.8);
   padding: 8px;
   text-align: center;
+}
+
+.image-container {
+  width: 160px; /* Adjust width as needed */
+  height: auto; /* Height will adjust to maintain aspect ratio */
+  margin: auto;
+}
+.typeselection {
+  margin-bottom: -20px;
 }
 </style>

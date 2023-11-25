@@ -3,9 +3,9 @@
     <v-container fluid class='container'>
       <v-row class="rows">
         <!-- Top left -->
-        <v-col cols="12" md="6" lg="8" style="height: 500px;" class="columns">
+        <v-col cols="12" md="6" lg="8" class="columns">
           <v-row>
-            <v-col>
+            <v-col >
               <TeamSection />
 
             </v-col>
@@ -197,22 +197,6 @@ export default {
 </script>
 
 <style scoped>
-.control-panel-font {
-  font-family: "Open Sans", verdana, arial, sans-serif;
-  align-items: center;
-  font-size: 15px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  display: flex;
-  font-weight: 500;
-  height: 40px;
-}
-.sideBar {
-  border-right: 3px solid #3F51B5;
-  border-bottom: 3px solid #3F51B5;
-  background: #f0f0ffff;
-  padding-left: 0px;
-}
-
 
 .columns {
   border: 1px solid indigo;

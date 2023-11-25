@@ -48,6 +48,21 @@
       <v-btn color="yellow" @click="resetFilters" class="button">Reset Filters
       </v-btn>
       </span>
+      <span v-if="collapsed">
+      </span>
+      <span v-else> 
+      <v-btn
+        fixed
+        bottom
+        right
+        fab
+        dark
+        color="indigo"
+        @click="dialog = true"
+      >
+        <v-icon>mdi-help-circle</v-icon>
+      </v-btn>
+    </span>
       
       <span
         class="collapse-icon"

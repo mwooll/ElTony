@@ -1,4 +1,16 @@
 <template>
+  <v-dialog v-model="dialog" persistent>
+      <v-card>
+        <v-card-title>Welcome</v-card-title>
+        <v-card-text>
+          This is your welcome message or any other content you want to display in the popup.
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary" text @click="dialog = false">Close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   <v-app>
     <v-app-bar app fixed color="indigo" class="app-bar">
       <v-img 
@@ -35,6 +47,7 @@ export default {
   
   data() {
     return {
+      dialog: true,
     };
 
     

@@ -137,6 +137,7 @@ export default {
 <style>
 body {
   margin: 0 !important;
+  background-color: transparent;
 }
 
 h3 {
