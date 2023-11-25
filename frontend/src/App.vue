@@ -12,6 +12,7 @@
 
 <script>
 import ConfigurationPanel from './components/ConfigurationPanel'
+import '@fortawesome/fontawesome-free/js/all'
 
 export default {
   name: 'App',
