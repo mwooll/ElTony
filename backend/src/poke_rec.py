@@ -35,7 +35,8 @@ def get_recommendations(filtered_dataset, opponent_type):
             filtered_dataset = rec_dataset
 
     pokemon_data = filtered_dataset
-
+    if len(pokemon_data) < 6:
+        pokemon_data = pd.read_csv('pokemon.csv')
     selected_cols = ['HP', 'Attack', 'Defense', 'Sp_Atk', 'Sp_Def', 'Speed', 'Type_1', 'Type_2', 'Name']
     pokemon_data = pokemon_data[selected_cols]
 
