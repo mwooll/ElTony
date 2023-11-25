@@ -5,6 +5,7 @@ return recommendation as well as Key feature for recommendation
 
 """
 import os
+import json
 
 import pandas as pd
 from sklearn.cluster import KMeans
@@ -28,12 +29,10 @@ def get_recommendations(filtered_dataset, opponent_type):
         # Filter the data for the returned types
         rec_dataset = filtered_dataset[
             filtered_dataset['Type_1'].isin(recommended_types) | filtered_dataset['Type_2'].isin(recommended_types)]
-        print(rec_dataset)
 
         if len(rec_dataset) > 6:
             # Use the original dataset
             filtered_dataset = rec_dataset
-    print(filtered_dataset)
 
     pokemon_data = filtered_dataset
 
@@ -122,6 +121,7 @@ def get_recommendations(filtered_dataset, opponent_type):
 
     # Concatenate the DataFrames in the recommended_team list
     recommended_team = pd.concat(recommended_team, ignore_index=True)
+    recommended_team['Type_2'].fillna('None', inplace=True)
 
     recommended_team_json = recommended_team.to_json(orient='records', default_handler=str)
     pokemon_data['Cluster'] = pipeline.fit_predict(pokemon_data[features])
@@ -143,9 +143,23 @@ def get_recommendations(filtered_dataset, opponent_type):
 
     # Convert the cluster information to JSON format
     cluster_info_json = cluster_info.to_json(orient='records', default_handler=str, indent=2)
+    num_pokemon = len(recommended_team_json)
+    average_stats = {}
 
-    cluster_info_path = 'cluster_info.csv'
-    pokemon_data[['Name', 'Cluster', 'PCA1', 'PCA2']].to_csv(cluster_info_path, index=False)
+    for _, pokemon in recommended_team.iterrows():
+        for stat, value in pokemon.items():
+            # Exclude Type_1 and Type_2 from averaging
+            if stat not in ["Type_1", "Type_2", "Name", "Types", "Cluster", "Key_Feature"]:
+                average_stats[stat] = average_stats.get(stat, 0) + value / num_pokemon
+
+    # Construct the team_stats_json manually
+    team_stats_json = "{\n"
+    for stat, value in average_stats.items():
+        team_stats_json += f'  "{stat}": {value},\n'
+    team_stats_json = team_stats_json.rstrip(',\n')  # Remove the trailing comma and newline
+    team_stats_json += "\n}"
 
     print(recommended_team_json)
-    return recommended_team_json,cluster_info_json
+    print(team_stats_json)
+
+    return recommended_team_json,cluster_info_json, team_stats_json

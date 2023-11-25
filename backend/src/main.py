@@ -14,6 +14,7 @@ api = Api(app)
 
 pokemon_data = pd.read_csv('pokemon.csv')
 clusterinfo = []  # Initialize clusterinfo to an empty list
+teamStats = []
 filtered_pokemon_data = pd.DataFrame()
 
 @app.route('/api/filter', methods=['OPTIONS'])
@@ -58,11 +59,11 @@ def recommend_endpoint():
 
         # Assuming you have a function get_recommendations in poke_rec.py
         global clusterinfo  # Use the global variable
-        recommendations, clusterinfo = get_recommendations(data_to_recommend, opponentType)
-        print(recommendations)
-        print(clusterinfo)
-        serve_cluster_info()
+        global teamStats
+        recommendations, clusterinfo, teamStats = get_recommendations(data_to_recommend, opponentType)
+
         return recommendations
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -100,6 +101,12 @@ class PokemonResource(Resource):
 def serve_cluster_info():
     # Return the global clusterinfo variable as JSON
     return clusterinfo
+
+@app.route('/teamstats', methods=['GET'])
+def serve_team_stats():
+    # Return the global clusterinfo variable as JSON
+    return teamStats
+
 
 api.add_resource(PokemonList, '/pokemons')
 api.add_resource(PokemonResource, '/pokemons/<string:name>')
