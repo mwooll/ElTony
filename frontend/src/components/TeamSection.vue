@@ -9,22 +9,22 @@
           @input="setOpponentType"
       ></v-select>
     </v-col>
-
     <!-- Team images with name and key feature -->
     <v-col v-for="(pokemon, index) in recommendedPokemon" :key="index" cols="2">
-      <v-img
-          :src="`/images/${pokemon.image}`"
-          aspect-ratio="1"
-          cover
-          class="team-image"
-      >
+      <v-row align="center" justify="center">
+        <v-img :src="getPokemonImage(pokemon.name)" height="130" width="130" align="center" style="margin-top: 30px;"></v-img>
         <!-- Display the name and key feature below the image -->
-        <div class="pokemon-details">
-          <p>{{ pokemon.Name }}</p>
+      </v-row>
+
+      <v-row align="center" justify="center">
+        <v-col>
+
+        <p>{{ pokemon.Name }}</p>
           <p>{{ pokemon.Types }}</p>
           <p>{{ pokemon.Key_Feature }}</p>
-        </div>
-      </v-img>
+        </v-col>
+
+      </v-row>
     </v-col>
     <v-col
       v-for="(photo, index) in photos"
@@ -66,14 +66,6 @@
 export default {
   data() {
     return {
-      photos: [
-        require('@/assets/images/1.png'),
-        require('@/assets/images/2.png'),
-        require('@/assets/images/3.png'),
-        require('@/assets/images/4.png'),
-        require('@/assets/images/5.png'),
-        require('@/assets/images/6.png'),
-      ],
       recommendedPokemon: [],
       teamImages: [],
       opponentType: null, // Default opponent type is null
@@ -84,6 +76,19 @@ export default {
   },
 
     methods: {
+      getPokemonImage(imageName) {
+        if (imageName) {
+          imageName = imageName.toLowerCase()
+
+
+          // Construct the image path based on the image name
+          const imagePath = require(`@/assets/poke_images/${imageName}.png`);
+          return imagePath;
+        }
+        const imagePath = require(`@/assets/pokeball.png`);
+        return imagePath; // Fallback image or an empty string if no image is available
+      },
+
       setOpponentType(opponentTeamType) {
         this.opponentType = opponentTeamType;
       },
@@ -108,14 +113,12 @@ export default {
 
         const recommendedPokemon = await recommendationResponse.json();
 
-        // Update the component's state with the recommended Pokemon
         this.recommendedPokemon = recommendedPokemon;
 
-        // Fetch additional details (image and key feature) for recommended Pokemon
         await this.fetchPokemonDetails();
-
         // Update the teamImages array with the fetched image URLs
-        this.teamImages = this.recommendedPokemon.map(pokemon => pokemon.image);
+
+
       } catch (error) {
         console.error('Error recommending team:', error);
       }

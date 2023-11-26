@@ -27,6 +27,15 @@ export default {
 
   data() {
     return {
+      clusterData:{
+        name: [],
+        hp: [],
+        attack:[] ,
+        defense:[] ,
+        spAtk:[] ,
+        spDef:[] ,
+        speed: [],
+      },
       clusterInfo: {
         x: [],
         y: [],
@@ -124,7 +133,7 @@ export default {
             speed: additionalStats.speed,
           });
 
-          this.$emit('pokemonSelectedCluster', selectedPokemonName);
+          this.$emit('pokemonSelectedCluster', this.clusterData);
         } catch (error) {
           console.error('Error fetching additional Pokemon data:', error);
         }

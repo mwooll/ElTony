@@ -111,6 +111,7 @@ export default {
       values: ['Black','Blue','Brown','Green', 'Grey','Pink', 'Purple','Red','White','Yellow'],
     },
     scatterPlotData: { x: [], y: [], name: [] },
+
     filteredData: [],
 
   }),
