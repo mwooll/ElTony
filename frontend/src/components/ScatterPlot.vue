@@ -132,7 +132,10 @@ export default {
         yaxis: {
           title: "Defense",
           showgrid: false,  
-        }
+        },
+        margin: {
+            t: 30  // Top margin, increase this value to add more space above the chart
+          },
       };
       var config = {
         responsive: true,

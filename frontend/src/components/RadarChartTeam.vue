@@ -1,4 +1,7 @@
 <template>
+  <v-btn icon class="expand-button" @click="expandPlot">
+      <v-icon>mdi-fullscreen</v-icon>
+    </v-btn>
   <v-row align="center" justify="center" className="mt-1 mb-0">
     <h3 align = "center">Team Stats</h3>
   </v-row>
@@ -47,6 +50,9 @@ export default {
             range: [0, 1]
           }
         },
+        margin: {
+            t: 30  // Top margin, increase this value to add more space above the chart
+          },
         showlegend: false
       };
 

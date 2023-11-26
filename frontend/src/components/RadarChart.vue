@@ -1,16 +1,27 @@
 <template>
-    <v-row align="center" justify="center" class="mt-1" style="margin-bottom: 10px;">
-      <h3> Pokemon Comparison</h3>
-    </v-row>
-    <v-row align="center" justify="center" class="mt-1 mb-0">
-      <p>{{ pokemonStats.name }}</p>
-     </v-row>
-  <v-row align="center" justify="center" class="mt-1 mb-0" >
-    <p>{{ clusterStats.name }}</p>
+  <v-btn icon class="expand-button" @click="expandPlot">
+      <v-icon>mdi-fullscreen</v-icon>
+    </v-btn>  
+    <v-row align="center" justify="center" className="mt-1 mb-0">
+    <h3 align = "center">Pokemon comparison</h3>
   </v-row>
     <div>
-    <div id="mySpiderPlot" style="width: 100%; height: 150%;"></div>
+    <div id="mySpiderPlot" style="width: 100%; height: 100%; margin-top: 0px;" class="spiderplot"></div>
     </div>
+    
+  <v-row class="additional-info">
+    <v-col cols="6" class="info-square left-square">
+      <v-row align="center" justify="center" class="mt-1 mb-0">
+      <p>{{ pokemonStats.name }}</p>
+     </v-row>
+     <v-row align="center" justify="center" class="mt-1 mb-0" >
+    <p>{{ clusterStats.name }}</p>
+  </v-row>
+    </v-col>
+    <v-col cols="6" class="info-square right-square">
+      <!-- Content for the right square -->
+    </v-col>
+  </v-row>
   </template>
 
   <script>
@@ -48,6 +59,7 @@
             theta: ['HP', 'Attack', 'Defense', 'Sp. Atk', 'Sp. Def', 'Speed'],
             fill: 'toself',
             name: 'Original Pokemon',
+            line: { color: 'indigo' },
           },
           {
             type: 'scatterpolar',
@@ -55,11 +67,16 @@
             theta: ['HP', 'Attack', 'Defense', 'Sp. Atk', 'Sp. Def', 'Speed'],
             fill: 'toself',
             name: 'Cluster Pokemon',
-            line: { color: 'orange' }, // Change the color of the second trace
+            line: { color: 'yellow' }, // Change the color of the second trace
           },
         ];
 
         var layout = {
+          
+          margin: {
+            t: 30  // Top margin, increase this value to add more space above the chart
+          },
+
           polar: {
             angularaxis: { rotation: 90 },
             radialaxis: {
@@ -67,6 +84,8 @@
               range: [0, 250],
             },
           },
+          paper_bgcolor: 'rgba(0,0,0,0)',  // Transparent background for the whole chart
+          plot_bgcolor: 'rgba(0,0,0,0)',  
           showlegend: true,
           legend: {
             orientation: "h", // Set legend orientation to horizontal
@@ -87,4 +106,20 @@
 body {
   margin: 0 !important;
 }
+
+.info-square {
+  width: 235px; /* Square size */
+  height:240px; /* Square size */
+  background-color: #ddd; /* Square color */
+  /* Add more styling as needed */
+}
+
+.right-square {
+  background-color: #c51b1b;
+}
+
+.spiderplot {
+  margin-top: 20x;
+}
+
 </style>
