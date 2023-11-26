@@ -1,39 +1,30 @@
 <template>
   <div>
-    <v-row align="center" justify="center" className="mt-1 mb-0">
-      <h3 align = "center"> Cluster Information </h3>
+    <v-row align="center" justify="center" class="mt-1 mb-0">
+      <h3 align="center"> Cluster Information </h3>
     </v-row>
     <div id="PCAScatter" style="height: 400px;"></div>
   </div>
 </template>
-
 
 <script>
 import Plotly from 'plotly.js-dist';
 
 export default {
   name: 'ClusterPlot',
-  props: ['SelectedCluster'],
-
-  watch: {
-    selectedCategory: function () {
-      this.clusterInfo.x = [];
-      this.clusterInfo.y = [];
-      this.clusterInfo.name = [];
-      this.clusterInfo.typeColor = [];
-      this.fetchData();
-    }
-  },
+  props: ['selectedCategory'],
 
   data() {
     return {
-      clusterData:{
+      clusterData: [],
+
+      clusterData2: {
         name: [],
         hp: [],
-        attack:[] ,
-        defense:[] ,
-        spAtk:[] ,
-        spDef:[] ,
+        attack: [],
+        defense: [],
+        spAtk: [],
+        spDef: [],
         speed: [],
       },
       clusterInfo: {
@@ -118,22 +109,29 @@ export default {
       document.getElementById('PCAScatter').on('plotly_click', async (data) => {
         const pointIndex = data.points[0].pointIndex;
         const selectedPokemonName = this.clusterInfo.name[pointIndex];
-
+        console.log('Selected Pokemon:', this.clusterInfo.name[pointIndex]);
         try {
-          const response = await fetch(`http://127.0.0.1:5000/pokemon/${selectedPokemonName}`);
+          const response = await fetch(`http://127.0.0.1:5000/pokemons/${selectedPokemonName}`);
           const additionalStats = await response.json();
+          console.log('Selected Pokemon stats:', additionalStats);
 
-          this.$set(this.clusterData, selectedPokemonName, {
-            name: additionalStats.name,
-            hp: additionalStats.hp,
-            attack: additionalStats.attack,
-            defense: additionalStats.defense,
-            spAtk: additionalStats.spAtk,
-            spDef: additionalStats.spDef,
-            speed: additionalStats.speed,
+          this.clusterData = [];
+
+          // Reset clusterData object before adding data for the new selected point
+          this.clusterData.push({
+            name: additionalStats.Name,
+            hp: additionalStats.HP,
+            attack: additionalStats.Attack,
+            defense: additionalStats.Defense,
+            spAtk: additionalStats.Sp_Atk,
+            spDef: additionalStats.Sp_Def,
+            speed: additionalStats.Speed,
+            image: additionalStats.image
           });
 
+
           this.$emit('pokemonSelectedCluster', this.clusterData);
+          console.log('Event emitted:', this.clusterData);
         } catch (error) {
           console.error('Error fetching additional Pokemon data:', error);
         }

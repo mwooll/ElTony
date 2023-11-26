@@ -12,7 +12,7 @@
     <!-- Team images with name and key feature -->
     <v-col v-for="(pokemon, index) in recommendedPokemon" :key="index" cols="2">
       <v-row align="center" justify="center">
-        <v-img :src="getPokemonImage(pokemon.name)" height="130" width="130" align="center" style="margin-top: 30px;"></v-img>
+        <v-img :src="getPokemonImage(pokemon.Name)" height="130" width="130" align="center" style="margin-top: 30px;"></v-img>
         <!-- Display the name and key feature below the image -->
       </v-row>
 

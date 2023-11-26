@@ -67,6 +67,7 @@ export default {
   components: {ScatterPlot, SpiderPlot, SpiderPlotTeam,TeamSection,ClusterVis},
   data: () => ({
     scatterPlotId: 0,
+    PCAScatter: 0,
     linePlotId: 0,
     extraPlotId: 0,
     columnWidth: "11",
@@ -167,7 +168,8 @@ export default {
       this.selectedPokemonStats = stats;
     },
     handleClusterSelection(stats) {
-      this.selectedClusterStats = stats;
+      console.log('Cluster selection stats:', stats);
+      this.selectedClusterStats = stats[0];
     },
     fetchData: async function () {
       // req URL to retrieve pokemons from backend
