@@ -35,15 +35,6 @@ export default {
   },
 
   watch: {
-    selectedCategory: function () {
-      this.ScatterPlotData.x = [];
-      this.ScatterPlotData.y = [];
-      this.ScatterPlotData.name = [];
-      this.ScatterPlotData.category = [];
-      this.ScatterPlotData.color = [];
-      this.ScatterPlotData.symbol = [];
-      this.fetchData();
-    }
   },
 
   data() {
@@ -58,7 +49,8 @@ export default {
         defense: [],
         spAtk: [],
         spDef: [],
-        speed: []
+        speed: [],
+        image: [],
       },
     };
   },
@@ -93,6 +85,7 @@ export default {
         this.ScatterPlotData.spAtk.push(pokemon.Sp_Atk);
         this.ScatterPlotData.spDef.push(pokemon.Sp_Def);
         this.ScatterPlotData.speed.push(pokemon.Speed);
+        this.ScatterPlotData.image.push(pokemon.image);
       });
 
       this.drawScatterPlot();
@@ -121,7 +114,7 @@ export default {
         hovertemplate: '<b>%{text}</b>' +
             '<br>Attack: %{x}' +
             '<br>Defense: %{y}',
-        text: this.ScatterPlotData.name, // Name of the Pokemon
+        text: this.ScatterPlotData.name,
       };
       var data = [trace1];
       var layout = {
@@ -154,6 +147,7 @@ export default {
           spAtk: this.ScatterPlotData.spAtk[pointIndex],
           spDef: this.ScatterPlotData.spDef[pointIndex],
           speed: this.ScatterPlotData.speed[pointIndex],
+          image: this.ScatterPlotData.image[pointIndex],
         };
         this.$emit('pokemonSelected', this.selectedPokemonStats);
       }.bind(this));

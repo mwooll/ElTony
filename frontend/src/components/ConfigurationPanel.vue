@@ -40,6 +40,7 @@
           <SpiderPlot :pokemonStats="selectedPokemonStats"
                       :cluster-stats="selectedClusterStats"
                       :series="formattedSeriesForRadarChart"
+                      @reset-data="handleReset"
                       />
         </v-col>
 
@@ -132,6 +133,26 @@ export default {
   },
 
   methods: {
+
+    handleReset() {
+    this.selectedPokemonStats = {
+        hp: 0,
+        attack: 0,
+        defense: 0,
+        spAtk: 0,
+        spDef: 0,
+        speed: 0,
+      };
+      this.selectedClusterStats = {
+        name: 0,
+        hp: 0,
+        attack: 0,
+        defense: 0,
+        spAtk: 0,
+        spDef: 0,
+        speed: 0,
+      };
+    },
 
     handleExpandPlot() {
     // You can emit another event that App.vue will listen to

@@ -11,15 +11,21 @@
     
   <v-row class="additional-info">
     <v-col cols="6" class="info-square left-square">
-      <v-img :src="getPokemonImage(pokemonStats.image)" height="100" width="100"></v-img>
-      <p>{{ pokemonStats.name }}</p>
-
+      <v-row align="center" justify="center">
+      <v-img :src="getPokemonImage(pokemonStats.image)" height="150" width="150" align="center" style="margin-top: 10px;"></v-img>
+      </v-row>
+      <p style="color:indigo; font-weight:bold" align="center">{{ pokemonStats.name }}</p>
     </v-col>
     <v-col cols="6" class="info-square right-square">
-      <v-row align="center" justify="center" class="mt-1 mb-0">
-        <p>{{ clusterStats.name }}</p>
+      <v-row align="center" justify="center">
+      <v-img :src="getPokemonImage(clusterStats.image)" height="150" width="150" align="center" style="margin-top: 10px;"></v-img>
       </v-row>
+        <p style="color:yellow; font-weight:bold" align="center">{{ clusterStats.name }}</p>
     </v-col>
+    <v-row align="center" justify="center">
+    <v-btn color="yellow" @click="resetFilters" class="button" align="center">Reset
+      </v-btn>
+    </v-row>
   </v-row>
   </template>
 
@@ -45,17 +51,24 @@
     },
 
     methods: {
+      resetFilters() {
+        this.$emit('reset-data');
+      },
 
       getPokemonImage(imageName) {
-          if (imageName) {
-            return require(`@/assets/poke_images/${imageName}`);
-          }
-          return ''; // Fallback image or an empty string if no image is available
-        },
+        if (imageName) {
+          // Construct the image path based on the image name
+          const imagePath = require(`@/assets/poke_images/${imageName}`);
+          return imagePath;
+        }
+        const imagePath = require(`@/assets/pokeball.png`);
+        return imagePath; // Fallback image or an empty string if no image is available
+      },
         
       drawSpiderPlot(stats, clusterStats) {
         // Check if both sets of stats are available
         if (!stats || !clusterStats) {
+          Plotly.newPlot('mySpiderPlot', [], {});
           return;
         }
 
@@ -116,17 +129,22 @@ body {
 
 .info-square {
   width: 235px; /* Square size */
-  height:240px; /* Square size */
-  background-color: #ddd; /* Square color */
+  height:190px; /* Square size */
+  background-color: transparent; /* Square color */
   /* Add more styling as needed */
 }
 
 .right-square {
-  background-color: #c51b1b;
+  background-color:transparent;
 }
 
 .spiderplot {
   margin-top: 20x;
 }
+
+.button {
+  margin-top: 10px
+}
+
 
 </style>
