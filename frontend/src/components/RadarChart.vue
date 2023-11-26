@@ -12,13 +12,13 @@
   <v-row class="additional-info">
     <v-col cols="6" class="info-square left-square">
       <v-row align="center" justify="center">
-      <v-img :src="getPokemonImage(pokemonStats.image)" height="150" width="150" align="center" style="margin-top: 10px;"></v-img>
+      <v-img :src="getPokemonImage(pokemonStats.image)" height="130" width="130" align="center" style="margin-top: 30px;"></v-img>
       </v-row>
       <p style="color:indigo; font-weight:bold" align="center">{{ pokemonStats.name }}</p>
     </v-col>
     <v-col cols="6" class="info-square right-square">
       <v-row align="center" justify="center">
-      <v-img :src="getPokemonImage(clusterStats.image)" height="150" width="150" align="center" style="margin-top: 10px;"></v-img>
+      <v-img :src="getPokemonImage(clusterStats.image)" height="130" width="130" align="center" style="margin-top: 30px;"></v-img>
       </v-row>
         <p style="color:yellow; font-weight:bold" align="center">{{ clusterStats.name }}</p>
     </v-col>
@@ -80,6 +80,8 @@
             fill: 'toself',
             name: 'Original Pokemon',
             line: { color: 'indigo' },
+            text: [stats.hp, stats.attack, stats.defense, stats.spAtk, stats.spDef, stats.speed].map(String),
+            hoverinfo: 'text',
           },
           {
             type: 'scatterpolar',
@@ -87,7 +89,9 @@
             theta: ['HP', 'Attack', 'Defense', 'Sp. Atk', 'Sp. Def', 'Speed'],
             fill: 'toself',
             name: 'Cluster Pokemon',
-            line: { color: 'yellow' }, // Change the color of the second trace
+            line: { color: 'yellow' },
+            text: [clusterStats.hp, clusterStats.attack, clusterStats.defense, clusterStats.spAtk, clusterStats.spDef, clusterStats.speed].map(String),
+            hoverinfo: 'text', // Change the color of the second trace
           },
         ];
 
