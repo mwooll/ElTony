@@ -1,9 +1,26 @@
 <template>
   <v-dialog v-model="dialog" persistent>
       <v-card>
-        <v-card-title align="center">Welcome to our Pokemon Recommentation Dashboard</v-card-title>
-        <v-card-text align="center">
-          The dashboard consists of 5 components
+        <v-card-title align="center" style="color:indigo">Welcome to our Pokemon Recommentation Dashboard</v-card-title>
+        <v-card-text >
+          <p>Welcome to our data visualization app. This guide will help you navigate and utilize the app's features effectively for comprehensive data analysis.</p>
+          <p>&nbsp;</p>
+        <p><strong>Understanding the Interface:</strong> The app presents all visualization components on a single page for a seamless experience. The main area of the screen displays various data charts, while the sidebar is dedicated to filters that can be applied to these charts.</p>
+        <p>&nbsp;</p> 
+        <p><strong>Using Radar Charts:</strong> The radar chart, visible on the main screen, is excellent for comparing multiple variables. It displays data in a spider-web-like diagram, ideal for evaluating attributes of two specific pokemons. </p>
+        <p>&nbsp;</p>
+        <p><strong>Exploring Scatter Plots:</strong> Alongside the radar chart, you'll find the scatter plot. In here you will be able to see the relation between attack and defense of a pokemon. They are also colored by their type for an easier distinction.</p>
+        <p>&nbsp;</p>
+        <p><strong>Adjusting Filters via the Sidebar:</strong> Use the sidebar to refine the data displayed on your charts. Filters allow you to focus on specific data ranges, categories, or criteria, enhancing the relevance and precision of the visualizations.</p>
+        <p>&nbsp;</p>
+        <p><strong>Analyzing Team Data:</strong> For insights into team dynamics or performance, refer to the 'Team Stats' visualizations. Here you will be able to see how balanced your recommended team is and where there is place for improvement.</p>
+        <p>&nbsp;</p>
+        <p><strong>Cluster Visualization:</strong> The 'Cluster Vis' feature on the main screen helps in identifying patterns and clusters within large datasets. You will be able to see why a certain pokemon was chose, and which pokemons would have a similar effect on your team.</p>
+        <p>&nbsp;</p>
+        <p><strong>Interactive Features for Enhanced Analysis:</strong> The app is interactive, allowing you to hover over data points for detailed information or select a certain pokemon in the scatter plot to compare him in the spyder chart to the one that got recommended to you.</p>
+
+
+
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
