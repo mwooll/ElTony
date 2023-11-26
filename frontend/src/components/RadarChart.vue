@@ -14,12 +14,11 @@
       <v-row align="center" justify="center" class="mt-1 mb-0">
       <p>{{ pokemonStats.name }}</p>
      </v-row>
-     <v-row align="center" justify="center" class="mt-1 mb-0" >
-    <p>{{ clusterStats.name }}</p>
-  </v-row>
     </v-col>
     <v-col cols="6" class="info-square right-square">
-      <!-- Content for the right square -->
+      <v-row align="center" justify="center" class="mt-1 mb-0">
+        <p>{{ clusterStats.name }}</p>
+      </v-row>
     </v-col>
   </v-row>
   </template>
