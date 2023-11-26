@@ -11,9 +11,9 @@
     
   <v-row class="additional-info">
     <v-col cols="6" class="info-square left-square">
-      <v-row align="center" justify="center" class="mt-1 mb-0">
+      <v-img :src="getPokemonImage(pokemonStats.image)" height="100" width="100"></v-img>
       <p>{{ pokemonStats.name }}</p>
-     </v-row>
+
     </v-col>
     <v-col cols="6" class="info-square right-square">
       <v-row align="center" justify="center" class="mt-1 mb-0">
@@ -45,6 +45,14 @@
     },
 
     methods: {
+
+      getPokemonImage(imageName) {
+          if (imageName) {
+            return require(`@/assets/poke_images/${imageName}`);
+          }
+          return ''; // Fallback image or an empty string if no image is available
+        },
+        
       drawSpiderPlot(stats, clusterStats) {
         // Check if both sets of stats are available
         if (!stats || !clusterStats) {

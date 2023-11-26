@@ -136,6 +136,7 @@ export default {
         margin: {
             t: 30  // Top margin, increase this value to add more space above the chart
           },
+        showlegend: true
       };
       var config = {
         responsive: true,
