@@ -1,65 +1,55 @@
 <template>
-  <v-row>
-    <!-- Dropdown menu for selecting opponent type -->
-    <v-col cols="12" class="typeselection">
-      <v-select
-          v-model="opponentType"
-          :items="opponentTypes"
-          label="Select Opponent Type"
-          @input="setOpponentType"
-      ></v-select>
-    </v-col>
-    <!-- Team images with name and key feature -->
-    <v-col v-for="(pokemon, index) in recommendedPokemon" :key="index" cols="2">
-      <v-row align="center" justify="center">
-        <v-img :src="getPokemonImage(pokemon.Name)" height="130" width="130" align="center" style="margin-top: 30px;"></v-img>
-        <!-- Display the name and key feature below the image -->
-      </v-row>
+  <div>
+    <v-row>
+      <!-- Dropdown menu for selecting opponent type -->
+      <v-col cols="12" class="typeselection">
+        <v-select
+            v-model="opponentType"
+            :items="opponentTypes"
+            label="Select Opponent Type"
+            @input="setOpponentType"
+        ></v-select>
+      </v-col>
 
-      <v-row align="center" justify="center">
-        <v-col>
-
-        <p>{{ pokemon.Name }}</p>
-          <p>{{ pokemon.Types }}</p>
-          <p>{{ pokemon.Key_Feature }}</p>
-        </v-col>
-
-      </v-row>
-    </v-col>
-    <v-col
-      v-for="(photo, index) in photos"
-      :key="index"
-      class="d-flex child-flex"
-      cols="4"
-    >
-    <div class="image-container">
-      <v-img
-        class="custom-image"
-        :src="photo"
-        :lazy-src="photo"
-        aspect-ratio="1"
-        cover
-      >
-        <template v-slot:placeholder>
-          <v-row
-            class="fill-height ma-0"
-            align="center"
-            justify="center"
-          >
-            <v-progress-circular
-              indeterminate
-              color="grey-lighten-5"
-            ></v-progress-circular>
+      <!-- Team images with name, key feature, and swap button -->
+      <v-col v-for="(pokemon, index) in recommendedPokemon" :key="index" cols="2">
+        <v-btn @click="navigateToPokemonDetails(pokemon)">
+          <v-row align="center" justify="center">
+            <v-img
+                :src="getPokemonImage(pokemon.Name)"
+                height="130"
+                width="130"
+                align="center"
+                style="margin-top: 30px;"
+            ></v-img>
           </v-row>
-        </template>
-      </v-img>
-    </div>
-    </v-col>
+          <v-row align="center" justify="center">
+            <v-col>
+              <!-- Pokemon details container -->
+              <div>
+                <p>{{ pokemon.Name }}</p>
+                <p>{{ pokemon.Types }}</p>
+                <p>{{ pokemon.Key_Feature }}</p>
+              </div>
+            </v-col>
+          </v-row>
+          <v-row align="center" justify="center">
+            <v-col>
+              <!-- Swap button -->
+              <v-btn @click="swapPokemon(pokemon)" color="primary">Swap</v-btn>
+            </v-col>
+          </v-row>
+        </v-btn>
+      </v-col>
+    </v-row>
+
     <!-- Recommend Team Button -->
-    <v-col cols="12">
-      <v-btn @click="recommendTeam" color="yellow">Recommend Team</v-btn>
-    </v-col>
-  </v-row>
+    <v-row>
+      <v-col cols="12">
+        <v-btn @click="recommendTeam" color="yellow">Recommend Team</v-btn>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script>
@@ -76,6 +66,17 @@ export default {
   },
 
     methods: {
+      swapPokemon(pokemon) {
+        // You can use this method to handle the swap button click event
+        console.log(`Swapping ${pokemon.Name}`);
+        // Add your logic for swapping the Pokémon in the team
+      },
+
+      navigateToPokemonDetails(pokemon) {
+        // You can use this method to navigate to the details page or perform other actions
+        console.log(`Clicked on ${pokemon.Name}. Redirect to details page.`);
+      },
+
       getPokemonImage(imageName) {
         if (imageName) {
           imageName = imageName.toLowerCase()
