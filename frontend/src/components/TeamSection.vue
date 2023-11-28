@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <v-row>
       <!-- Dropdown menu for selecting opponent type -->
       <v-col cols="12" class="typeselection">
@@ -10,42 +10,36 @@
             @input="setOpponentType"
         ></v-select>
       </v-col>
+    </v-row>
 
+    <v-row>
       <!-- Team images with name, key feature, and swap button -->
-      <v-col v-for="(pokemon, index) in recommendedPokemon" :key="index" cols="2">
-        <v-btn @click="navigateToPokemonDetails(pokemon)">
+      <v-col v-for="(pokemon, index) in recommendedPokemon" :key="index" cols="2" class="pokemon-card">
           <v-row align="center" justify="center">
-            <v-img
-                :src="getPokemonImage(pokemon.Name)"
-                height="130"
-                width="130"
-                align="center"
-                style="margin-top: 30px;"
-            ></v-img>
+            <div @click="navigateToPokemonDetails(pokemon)">
+              <img
+                  :src="getPokemonImage(pokemon.Name)"
+                  height="120"
+                  width="120"
+                  align="center">
+            </div>
           </v-row>
           <v-row align="center" justify="center">
-            <v-col>
               <!-- Pokemon details container -->
-              <div>
+              <div class="pokemon-details" >
                 <p>{{ pokemon.Name }}</p>
                 <p>{{ pokemon.Types }}</p>
                 <p>{{ pokemon.Key_Feature }}</p>
+                <!-- Swap button -->
+                <v-btn @click="swapPokemon(pokemon)" color="primary" class="swap" >Swap</v-btn>
               </div>
-            </v-col>
           </v-row>
-          <v-row align="center" justify="center">
-            <v-col>
-              <!-- Swap button -->
-              <v-btn @click="swapPokemon(pokemon)" color="primary">Swap</v-btn>
-            </v-col>
-          </v-row>
-        </v-btn>
       </v-col>
     </v-row>
 
     <!-- Recommend Team Button -->
     <v-row>
-      <v-col cols="12">
+      <v-col cols="12" class="recommend-row">
         <v-btn @click="recommendTeam" color="yellow">Recommend Team</v-btn>
       </v-col>
     </v-row>
@@ -65,34 +59,34 @@ export default {
     };
   },
 
-    methods: {
-      swapPokemon(pokemon) {
-        // You can use this method to handle the swap button click event
-        console.log(`Swapping ${pokemon.Name}`);
-        // Add your logic for swapping the Pokémon in the team
-      },
+  methods: {
+    swapPokemon(pokemon) {
+      // You can use this method to handle the swap button click event
+      console.log(`Swapping ${pokemon.Name}`);
+      // Add your logic for swapping the Pokémon in the team
+    },
 
-      navigateToPokemonDetails(pokemon) {
-        // You can use this method to navigate to the details page or perform other actions
-        console.log(`Clicked on ${pokemon.Name}. Redirect to details page.`);
-      },
+    navigateToPokemonDetails(pokemon) {
+      // You can use this method to navigate to the details page or perform other actions
+      console.log(`Clicked on ${pokemon.Name}. Redirect to details page.`);
+    },
 
-      getPokemonImage(imageName) {
-        if (imageName) {
-          imageName = imageName.toLowerCase()
+    getPokemonImage(imageName) {
+      if (imageName) {
+        imageName = imageName.toLowerCase()
 
 
-          // Construct the image path based on the image name
-          const imagePath = require(`@/assets/poke_images/${imageName}.png`);
-          return imagePath;
-        }
-        const imagePath = require(`@/assets/pokeball.png`);
-        return imagePath; // Fallback image or an empty string if no image is available
-      },
+        // Construct the image path based on the image name
+        const imagePath = require(`@/assets/poke_images/${imageName}.png`);
+        return imagePath;
+      }
+      const imagePath = require(`@/assets/pokeball.png`);
+      return imagePath; // Fallback image or an empty string if no image is available
+    },
 
-      setOpponentType(opponentTeamType) {
-        this.opponentType = opponentTeamType;
-      },
+    setOpponentType(opponentTeamType) {
+      this.opponentType = opponentTeamType;
+    },
     async recommendTeam() {
       try {
         // Check if opponentTeamType is selected, if not, set it to 'None'
@@ -135,24 +129,28 @@ export default {
       }
     },
 
-    
+
   },
 };
 </script>
 
 <style scoped>
+.container {
+  //display: flex;
+  justify-content: center;
+  align-items: center;
+  //flex-direction: column;
+  height: 50vh;
+}
+
 .team-image {
   margin-bottom: 10px;
 }
 
 .pokemon-details {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
   background-color: rgba(255, 255, 255, 0.8);
-  padding: 8px;
   text-align: center;
+  font-size: small;
 }
 
 .image-container {
@@ -162,5 +160,18 @@ export default {
 }
 .typeselection {
   margin-bottom: -20px;
+}
+
+/* Flexbox to position the Recommend Team button */
+.pokemon-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.recommend-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
 }
 </style>
