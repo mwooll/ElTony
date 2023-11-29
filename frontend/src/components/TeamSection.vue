@@ -14,26 +14,27 @@
 
     <v-row>
       <!-- Team images with name, key feature, and swap button -->
-      <v-col v-for="(pokemon, index) in recommendedPokemon" :key="index" cols="2" class="pokemon-card">
-          <v-row align="center" justify="center">
-            <div @click="navigateToPokemonDetails(pokemon)">
-              <img
-                  :src="getPokemonImage(pokemon.Name)"
-                  height="120"
-                  width="120"
-                  align="center">
+      <v-col v-for="(pokemon, index) in recommendedPokemon" :key="index" cols="2">
+        <v-row align="center" justify="center">
+          <div @click="navigateToPokemonDetails(pokemon)">
+            <v-img :src="getPokemonImage(pokemon.Name)" height="120" width="120" align="center"></v-img>
+          </div>
+        </v-row>
+        <v-row align="center" justify="center">
+          <div class="pokemon-details-wrapper">
+            <!-- Pokemon details container -->
+            <div class="pokemon-details" :class="getPokemonTypeClass(pokemon.Types)">
+              <p>{{ pokemon.Name }}</p>
+              <p>{{ pokemon.Types }}</p>
+              <p>{{ pokemon.Key_Feature }}</p>
+              <!-- Swap button -->
+              <v-btn @click="swapPokemon(pokemon)" color="primary" class="swap" icon fab><v-icon>
+                mdi-swap-horizontal
+              </v-icon></v-btn>
             </div>
-          </v-row>
-          <v-row align="center" justify="center">
-              <!-- Pokemon details container -->
-              <div class="pokemon-details" >
-                <p>{{ pokemon.Name }}</p>
-                <p>{{ pokemon.Types }}</p>
-                <p>{{ pokemon.Key_Feature }}</p>
-                <!-- Swap button -->
-                <v-btn @click="swapPokemon(pokemon)" color="primary" class="swap" >Swap</v-btn>
-              </div>
-          </v-row>
+          </div>
+
+        </v-row>
       </v-col>
     </v-row>
 
@@ -60,6 +61,36 @@ export default {
   },
 
   methods: {
+    getPokemonTypeClass(type) {
+      const typeClasses = {
+        Fire: 'fire-background',
+        Normal: 'normal-background',
+        Water: 'water-background',
+        Electric: 'electric-background',
+        Grass: 'grass-background',
+        Ice: 'ice-background',
+        Fighting: 'fighting-background',
+        Poison: 'poison-background',
+        Ground: 'ground-background',
+        Flying: 'flying-background',
+        Psychic: 'psychic-background',
+        Bug: 'bug-background',
+        Rock: 'rock-background',
+        Ghost: 'ghost-background',
+        Dragon: 'dragon-background',
+        Dark: 'dark-background',
+        Steel: 'steel-background',
+        Fairy: 'fairy-background',
+      };
+
+      // Default class if type not found
+      const defaultClass = 'default-background';
+
+      // Split types if necessary and get the class for the first type
+      const firstType = type.split(',')[0].trim();
+      return typeClasses[firstType] || defaultClass;
+    },
+
     swapPokemon(pokemon) {
       // You can use this method to handle the swap button click event
       console.log(`Swapping ${pokemon.Name}`);
@@ -138,21 +169,37 @@ export default {
 
 <style scoped>
 .container {
-  //display: flex;
+//display: flex;
   justify-content: center;
   align-items: center;
-  //flex-direction: column;
+//flex-direction: column;
   height: 50vh;
 }
-
+.swap{
+  margin-top: 5px;
+  width: 36px;
+  height: 36px;
+  min-width: 24px;
+  min-height: 24px;
+}
 .team-image {
   margin-bottom: 10px;
+}
+.pokemon-details-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 120px; /* Set the desired height for consistency */
 }
 
 .pokemon-details {
   background-color: rgba(255, 255, 255, 0.8);
   text-align: center;
   font-size: small;
+  padding: 12px;
+  border-radius: 10px;
+  width: 100px;
+  height: 120px;
 }
 
 .image-container {
@@ -176,4 +223,82 @@ export default {
   align-items: center;
   margin-top: 30px;
 }
+
+.fire-background {
+  background-color: #EE8130; /* Fire */
+}
+
+.normal-background {
+  background-color: #A8A77A; /* Normal */
+}
+
+.water-background {
+  background-color: #6390F0; /* Water */
+}
+
+.electric-background {
+  background-color: #F7D02C; /* Electric */
+}
+
+.grass-background {
+  background-color: #7AC74C; /* Grass */
+}
+
+.ice-background {
+  background-color: #96D9D6; /* Ice */
+}
+
+.fighting-background {
+  background-color: #C22E28; /* Fighting */
+}
+
+.poison-background {
+  background-color: #A33EA1; /* Poison */
+}
+
+.ground-background {
+  background-color: #E2BF65; /* Ground */
+}
+
+.flying-background {
+  background-color: #A98FF3; /* Flying */
+}
+
+.psychic-background {
+  background-color: #F95587; /* Psychic */
+}
+
+.bug-background {
+  background-color: #A6B91A; /* Bug */
+}
+
+.rock-background {
+  background-color: #B6A136; /* Rock */
+}
+
+.ghost-background {
+  background-color: #735797; /* Ghost */
+}
+
+.dragon-background {
+  background-color: #6F35FC; /* Dragon */
+}
+
+.dark-background {
+  background-color: #708090; /* Dark */
+}
+
+.steel-background {
+  background-color: #705746; /* Steel */
+}
+
+.fairy-background {
+  background-color: #D685AD; /* Fairy */
+}
+
+/* Default color if type not found */
+.default-background {
+  background-color: #ccc;
+}
+
 </style>
