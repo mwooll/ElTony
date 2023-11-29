@@ -1,9 +1,3 @@
-"""
-Recommender for the ideal pokemon team
-
-return recommendation as well as Key feature for recommendation
-
-"""
 import os
 import json
 

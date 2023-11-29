@@ -6,7 +6,7 @@
         <v-col cols="12" md="6" lg="8" class="columns">
           <v-row>
             <v-col >
-              <TeamSection />
+              <TeamSection @navigateToPokemonDetails="handleNavigateToPokemon"/>
 
             </v-col>
 
@@ -22,6 +22,7 @@
                   :selectedCategory="pokemons.selectedValue"
                   @pokemonSelectedCluster="handleClusterSelection"
                   :data="scatterPlotData"
+                  :highlightedPokemon="highlightedPokemon"
               />
             </v-col>
           </v-row>
@@ -114,7 +115,7 @@ export default {
     scatterPlotData: { x: [], y: [], name: [] },
 
     filteredData: [],
-
+    highlightedPokemon:null
   }),
 
   mounted() {
@@ -135,6 +136,10 @@ export default {
   },
 
   methods: {
+    handleNavigateToPokemon(pokeName) {
+      // Update the highlighted Pokemon
+      this.highlightedPokemon = pokeName;
+    },
 
     handleReset() {
     this.selectedPokemonStats = {

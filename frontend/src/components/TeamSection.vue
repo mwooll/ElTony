@@ -67,7 +67,9 @@ export default {
     },
 
     navigateToPokemonDetails(pokemon) {
-      // You can use this method to navigate to the details page or perform other actions
+
+      this.$emit('navigateToPokemonDetails', pokemon.Name);
+
       console.log(`Clicked on ${pokemon.Name}. Redirect to details page.`);
     },
 
