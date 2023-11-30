@@ -24,17 +24,13 @@ export default {
       type: String,
       default: ''
     },
-
     isExpanded(newValue) {
-    if (newValue) {
-      this.$nextTick(() => {
-        this.drawScatterPlot(); // Re-render the plot after the dialog opens
-      });
+      if (newValue) {
+        this.$nextTick(() => {
+          this.drawScatterPlot(); // Re-render the plot after the dialog opens
+        });
+      }
     }
-  }
-  },
-
-  watch: {
   },
 
   data() {
@@ -43,7 +39,7 @@ export default {
         x: [],
         y: [],
         name: [],
-        typeColor: [],
+        type_1: [], // Add type_1 array
         hp: [],
         attack: [],
         defense: [],
@@ -54,15 +50,14 @@ export default {
       },
     };
   },
+
   mounted() {
     setInterval(this.fetchData, 1000);
   },
 
-  
   methods: {
-
     expandPlot() {
-    this.$emit('expandPlotEvent');
+      this.$emit('expandPlotEvent');
     },
 
     fetchData: async function () {
@@ -73,12 +68,13 @@ export default {
       this.ScatterPlotData.x = [];
       this.ScatterPlotData.y = [];
       this.ScatterPlotData.name = [];
+      this.ScatterPlotData.Type_1 = []; // Initialize the Type_1 array
 
       responseData.forEach((pokemon) => {
         this.ScatterPlotData.x.push(pokemon.Attack);
         this.ScatterPlotData.y.push(pokemon.Defense);
         this.ScatterPlotData.name.push(pokemon.Name);
-        this.ScatterPlotData.typeColor.push(pokemon.TypeColor);
+        this.ScatterPlotData.Type_1.push(pokemon.Type_1);
         this.ScatterPlotData.hp.push(pokemon.HP);
         this.ScatterPlotData.attack.push(pokemon.Attack);
         this.ScatterPlotData.defense.push(pokemon.Defense);
@@ -91,24 +87,40 @@ export default {
       this.drawScatterPlot();
     },
 
-    stylizeMarkers() {
-      this.ScatterPlotData.category.forEach((cat) => {
-            this.ScatterPlotData.color.push(this.colors[cat])
-            this.ScatterPlotData.symbol.push(this.symbols[cat])
-          }
-      )
-    },
-
     drawScatterPlot() {
+      // Predefined color mapping for type_1
+      const typeColorMapping = {
+        'Fire': '#EE8130',
+        'Normal': '#A8A77A',
+        'Water': '#6390F0',
+        'Electric': '#F7D02C',
+        'Grass': '#7AC74C',
+        'Ice': '#96D9D6',
+        'Fighting': '#C22E28',
+        'Poison': '#A33EA1',
+        'Ground': '#E2BF65',
+        'Flying': '#A98FF3',
+        'Psychic': '#F95587',
+        'Bug': '#A6B91A',
+        'Rock': '#B6A136',
+        'Ghost': '#735797',
+        'Dragon': '#6F35FC',
+        'Dark': '#708090',
+        'Steel': '#705746',
+        'Fairy': '#D685AD',
+      };
+
+      // Map Type_1 to predefined colors
+      const colors = this.ScatterPlotData.Type_1.map(type => typeColorMapping[type] || '#ccc');
+
       var trace1 = {
-        x: this.ScatterPlotData.x, // Attack
-        y: this.ScatterPlotData.y, // Defense
+        x: this.ScatterPlotData.x,
+        y: this.ScatterPlotData.y,
         mode: 'markers',
         type: 'scatter',
         marker: {
           size: 5,
-          color: this.ScatterPlotData.typeColor,
-
+          color: colors, // Use the predefined colors
         },
         name: "",
         hovertemplate: '<b>%{text}</b>' +
@@ -116,6 +128,7 @@ export default {
             '<br>Defense: %{y}',
         text: this.ScatterPlotData.name,
       };
+
       var data = [trace1];
       var layout = {
         xaxis: {
@@ -124,17 +137,19 @@ export default {
         },
         yaxis: {
           title: "Defense",
-          showgrid: false,  
+          showgrid: false,
         },
         margin: {
-            t: 30  // Top margin, increase this value to add more space above the chart
-          },
+          t: 30
+        },
         showlegend: true
       };
+
       var config = {
         responsive: true,
         displayModeBar: false,
       };
+
       Plotly.newPlot('myScatterPlot', data, layout, config);
 
       document.getElementById('myScatterPlot').on('plotly_click', function (data) {
@@ -152,11 +167,10 @@ export default {
         this.$emit('pokemonSelected', this.selectedPokemonStats);
       }.bind(this));
     },
-
-
-  }
-}
+  },
+};
 </script>
+
 
 
 <style>
