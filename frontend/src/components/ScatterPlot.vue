@@ -7,7 +7,7 @@
       <h3 align="center"> Attack/Defense </h3>
     </v-row>
     <div style="height: 50vh">
-      <div id="myScatterPlot" style="width: 100%; height: 100%;"></div>
+      <div id="myScatterPlot" style="width: 100%; height: 100%;" @plotly_click="scatterClick"></div>
     </div>
   </div>
 
@@ -88,6 +88,7 @@ export default {
     },
 
     drawScatterPlot() {
+
       // Predefined color mapping for Type_1
       const typeColorMapping = {
         'Fire': '#EE8130',
@@ -162,13 +163,24 @@ export default {
       };
 
       Plotly.newPlot('myScatterPlot', traces, layout, config);
+      document.getElementById('myScatterPlot').on('plotly_click', function (data) {
+        var pointIndex = data.points[0].pointIndex;
+        this.selectedPokemonStats = {
+          name: this.ScatterPlotData.name[pointIndex],
+          hp: this.ScatterPlotData.hp[pointIndex],
+          attack: this.ScatterPlotData.attack[pointIndex],
+          defense: this.ScatterPlotData.defense[pointIndex],
+          spAtk: this.ScatterPlotData.spAtk[pointIndex],
+          spDef: this.ScatterPlotData.spDef[pointIndex],
+          speed: this.ScatterPlotData.speed[pointIndex],
+          image: this.ScatterPlotData.image[pointIndex],
+        };
+        this.$emit('pokemonSelected', this.selectedPokemonStats);
+      }.bind(this));
     },
   },
 };
 </script>
-
-
-
 
 <style>
 body {
