@@ -39,7 +39,7 @@ export default {
         x: [],
         y: [],
         name: [],
-        type_1: [], // Add type_1 array
+        Type_1: [],
         hp: [],
         attack: [],
         defense: [],
@@ -68,7 +68,7 @@ export default {
       this.ScatterPlotData.x = [];
       this.ScatterPlotData.y = [];
       this.ScatterPlotData.name = [];
-      this.ScatterPlotData.Type_1 = []; // Initialize the Type_1 array
+      this.ScatterPlotData.Type_1 = [];
 
       responseData.forEach((pokemon) => {
         this.ScatterPlotData.x.push(pokemon.Attack);
@@ -88,7 +88,7 @@ export default {
     },
 
     drawScatterPlot() {
-      // Predefined color mapping for type_1
+      // Predefined color mapping for Type_1
       const typeColorMapping = {
         'Fire': '#EE8130',
         'Normal': '#A8A77A',
@@ -113,23 +113,34 @@ export default {
       // Map Type_1 to predefined colors
       const colors = this.ScatterPlotData.Type_1.map(type => typeColorMapping[type] || '#ccc');
 
-      var trace1 = {
-        x: this.ScatterPlotData.x,
-        y: this.ScatterPlotData.y,
-        mode: 'markers',
-        type: 'scatter',
-        marker: {
-          size: 5,
-          color: colors, // Use the predefined colors
-        },
-        name: "",
-        hovertemplate: '<b>%{text}</b>' +
-            '<br>Attack: %{x}' +
-            '<br>Defense: %{y}',
-        text: this.ScatterPlotData.name,
-      };
+      const uniqueTypes = [...new Set(this.ScatterPlotData.Type_1)];
 
-      var data = [trace1];
+      // Create a trace for each unique type
+      const traces = uniqueTypes.map((type) => {
+        const filteredIndices = this.ScatterPlotData.Type_1.reduce((acc, curr, i) => {
+          if (curr === type) {
+            acc.push(i);
+          }
+          return acc;
+        }, []);
+
+        return {
+          x: filteredIndices.map(i => this.ScatterPlotData.x[i]),
+          y: filteredIndices.map(i => this.ScatterPlotData.y[i]),
+          mode: 'markers',
+          type: 'scatter',
+          marker: {
+            size: 5,
+            color: colors[filteredIndices[0]],
+          },
+          name: type,
+          hovertemplate: `<b>%{text}</b>` +
+              `<br>Attack: %{x}` +
+              `<br>Defense: %{y}`,
+          text: filteredIndices.map(i => this.ScatterPlotData.name[i]),
+        };
+      });
+
       var layout = {
         xaxis: {
           title: "Attack",
@@ -150,26 +161,12 @@ export default {
         displayModeBar: false,
       };
 
-      Plotly.newPlot('myScatterPlot', data, layout, config);
-
-      document.getElementById('myScatterPlot').on('plotly_click', function (data) {
-        var pointIndex = data.points[0].pointIndex;
-        this.selectedPokemonStats = {
-          name: this.ScatterPlotData.name[pointIndex],
-          hp: this.ScatterPlotData.hp[pointIndex],
-          attack: this.ScatterPlotData.attack[pointIndex],
-          defense: this.ScatterPlotData.defense[pointIndex],
-          spAtk: this.ScatterPlotData.spAtk[pointIndex],
-          spDef: this.ScatterPlotData.spDef[pointIndex],
-          speed: this.ScatterPlotData.speed[pointIndex],
-          image: this.ScatterPlotData.image[pointIndex],
-        };
-        this.$emit('pokemonSelected', this.selectedPokemonStats);
-      }.bind(this));
+      Plotly.newPlot('myScatterPlot', traces, layout, config);
     },
   },
 };
 </script>
+
 
 
 
@@ -187,7 +184,7 @@ h3 {
 .expand-button {
   top: 0;
   right: 0;
-  z-index: 10; /* Ensure it's above the plot */
+  z-index: 10;
 }
 
 </style>
