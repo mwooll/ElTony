@@ -140,24 +140,12 @@ export default {
 
         this.recommendedPokemon = recommendedPokemon;
 
-        await this.fetchPokemonDetails();
-        // Update the teamImages array with the fetched image URLs
-
 
       } catch (error) {
         console.error('Error recommending team:', error);
       }
     },
-    async fetchPokemonDetails() {
-      for (const pokemon of this.recommendedPokemon) {
-        const imageResponse = await fetch(`/images/${pokemon.image}`);
-        const imageData = await imageResponse.blob();
-        const imageUrl = URL.createObjectURL(imageData);
 
-        // Update the Pokemon object with the image URL
-        pokemon.image = imageUrl;
-      }
-    },
 
 
   },
