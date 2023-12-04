@@ -118,36 +118,61 @@ def get_recommendations(filtered_dataset, opponent_type):
 
     # Concatenate the DataFrames in the recommended_team list
     recommended_team = pd.concat(recommended_team, ignore_index=True)
+
     recommended_team['Type_2'].fillna('None', inplace=True)
 
     recommended_team_json = recommended_team.to_json(orient='records', default_handler=str)
-    pokemon_data['Cluster'] = pipeline.fit_predict(pokemon_data[features])
+
+    cluster_info = pokemon_data[['Name', 'Cluster', 'HP', 'Attack', 'Defense', 'Sp_Atk', 'Sp_Def', 'Speed']]
+    cluster_info = pd.concat([cluster_info, recommended_team], ignore_index=True)
+
+    cluster_info['Cluster'] = pipeline.fit_predict(cluster_info[features])
 
     # Sort Pokémon within each cluster by total stats
-    pokemon_data = pokemon_data.sort_values(by=['Cluster'] + numeric_features,
+    cluster_info = cluster_info.sort_values(by=['Cluster'] + numeric_features,
                                             ascending=[True] + [False] * len(numeric_features))
 
     # Perform PCA for visualization
     pca = PCA(n_components=2)
-    pca_result = pca.fit_transform(pokemon_data[numeric_features])
+    pca_result = pca.fit_transform(cluster_info[numeric_features])
 
     # Add PCA components to the DataFrame
-    pokemon_data['PCA1'] = pca_result[:, 0]
-    pokemon_data['PCA2'] = pca_result[:, 1]
+    cluster_info['PCA1'] = pca_result[:, 0]
+    cluster_info['PCA2'] = pca_result[:, 1]
 
     # Save the cluster information to a CSV file
-    cluster_info = pokemon_data[['Name', 'Cluster', 'PCA1', 'PCA2']]
+
+    # Add recommended team to the cluster information
 
     # Convert the cluster information to JSON format
     cluster_info_json = cluster_info.to_json(orient='records', default_handler=str, indent=2)
     num_pokemon = len(recommended_team_json)
     average_stats = {}
+    recommended_team_names = []
 
     for _, pokemon in recommended_team.iterrows():
         for stat, value in pokemon.items():
             # Exclude Type_1 and Type_2 from averaging
             if stat not in ["Type_1", "Type_2", "Name", "Types", "Cluster", "Key_Feature","image"]:
                 average_stats[stat] = average_stats.get(stat, 0) + value / num_pokemon
+
+    othersInCluster = []
+    for _, pokemon in recommended_team.iterrows():
+        cluster_id = int(pokemon['Cluster'])
+
+        # Get other Pokémon names in the same cluster
+        other_pokemon_in_cluster = pokemon_data.loc[pokemon_data['Cluster'] == cluster_id, 'Name'].tolist()
+
+        # Check if the recommended Pokémon's name is in the list before removing it
+        if pokemon['Name'] in other_pokemon_in_cluster:
+            other_pokemon_in_cluster.remove(pokemon['Name'])
+
+        othersInCluster.append({
+            'Recommended_Pokemon': pokemon['Name'],
+            'Other_Pokemon_In_Cluster': other_pokemon_in_cluster
+        })
+
+    others_in_cluster_json = json.dumps(othersInCluster, indent=2)
 
     # Construct the team_stats_json manually
     team_stats_json = "{\n"
@@ -159,4 +184,5 @@ def get_recommendations(filtered_dataset, opponent_type):
     print(recommended_team_json)
     print(team_stats_json)
 
-    return recommended_team_json,cluster_info_json, team_stats_json
+    return recommended_team_json, cluster_info_json, team_stats_json,others_in_cluster_json
+

@@ -87,8 +87,14 @@ export default {
       const defaultClass = 'default-background';
 
       // Split types if necessary and get the class for the first type
-      const firstType = type.split(',')[0].trim();
-      return typeClasses[firstType] || defaultClass;
+      if (typeof type === 'string' && type.trim() !== '') {
+        // Split types and get the class for the first type
+        const firstType = type.split(',')[0].trim();
+        return typeClasses[firstType] || defaultClass;
+      } else {
+        console.error('Invalid type:', type);
+        return defaultClass;
+      }
     },
 
     swapPokemon(pokemon) {
@@ -100,6 +106,8 @@ export default {
     navigateToPokemonDetails(pokemon) {
 
       this.$emit('navigateToPokemonDetails', pokemon.Name);
+      this.$emit('highlightSelectedPokemon', pokemon.index);
+
 
       console.log(`Clicked on ${pokemon.Name}. Redirect to details page.`);
     },

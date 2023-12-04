@@ -60,7 +60,8 @@ def recommend_endpoint():
         # Assuming you have a function get_recommendations in poke_rec.py
         global clusterinfo  # Use the global variable
         global teamStats
-        recommendations, clusterinfo, teamStats = get_recommendations(data_to_recommend, opponentType)
+        global othersinCluster
+        recommendations, clusterinfo, teamStats, othersinCluster = get_recommendations(data_to_recommend, opponentType)
 
         return recommendations
 
@@ -107,6 +108,10 @@ def serve_team_stats():
     # Return the global clusterinfo variable as JSON
     return teamStats
 
+@app.route('/othersInCluster', methods=['GET'])
+def serve_otherCluster():
+    # Return the global clusterinfo variable as JSON
+    return othersinCluster
 
 api.add_resource(PokemonList, '/pokemons')
 api.add_resource(PokemonResource, '/pokemons/<string:name>')
