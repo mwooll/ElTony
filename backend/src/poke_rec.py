@@ -31,7 +31,7 @@ def get_recommendations(filtered_dataset, opponent_type):
     pokemon_data = filtered_dataset
     if len(pokemon_data) < 6:
         pokemon_data = pd.read_csv('pokemon.csv')
-    selected_cols = ['HP', 'Attack', 'Defense', 'Sp_Atk', 'Sp_Def', 'Speed', 'Type_1', 'Type_2', 'Name']
+    selected_cols = ['HP', 'Attack', 'Defense', 'Sp_Atk', 'Sp_Def', 'Speed', 'Type_1', 'Type_2', 'Name', 'image']
     pokemon_data = pokemon_data[selected_cols]
 
     # Drop rows with missing types
@@ -144,7 +144,7 @@ def get_recommendations(filtered_dataset, opponent_type):
     for _, pokemon in recommended_team.iterrows():
         for stat, value in pokemon.items():
             # Exclude Type_1 and Type_2 from averaging
-            if stat not in ["Type_1", "Type_2", "Name", "Types", "Cluster", "Key_Feature"]:
+            if stat not in ["Type_1", "Type_2", "Name", "Types", "Cluster", "Key_Feature","image"]:
                 average_stats[stat] = average_stats.get(stat, 0) + value / num_pokemon
 
     # Construct the team_stats_json manually

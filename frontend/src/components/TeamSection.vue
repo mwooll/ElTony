@@ -17,7 +17,7 @@
       <v-col v-for="(pokemon, index) in recommendedPokemon" :key="index" cols="2">
         <v-row align="center" justify="center">
           <div @click="navigateToPokemonDetails(pokemon)">
-            <v-img :src="getPokemonImage(pokemon.Name)" height="120" width="120" align="center"></v-img>
+            <v-img :src="getPokemonImage(pokemon.image)" height="120" width="120" align="center"></v-img>
           </div>
         </v-row>
         <v-row align="center" justify="center">
@@ -106,11 +106,8 @@ export default {
 
     getPokemonImage(imageName) {
       if (imageName) {
-        imageName = imageName.toLowerCase()
-
-
         // Construct the image path based on the image name
-        const imagePath = require(`@/assets/poke_images/${imageName}.png`);
+        const imagePath = require(`@/assets/poke_images/${imageName}`);
         return imagePath;
       }
       const imagePath = require(`@/assets/pokeball.png`);
