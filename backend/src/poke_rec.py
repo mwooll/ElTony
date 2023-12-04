@@ -2,11 +2,13 @@ import os
 import json
 
 import pandas as pd
+from matplotlib import pyplot as plt
 from sklearn.cluster import KMeans
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.pipeline import Pipeline
 from sklearn.decomposition import PCA
+import seaborn as sns
 
 def get_recommendations(filtered_dataset, opponent_type):
     cluster_info_path = 'cluster_info.csv'
