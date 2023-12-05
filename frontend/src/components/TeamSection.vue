@@ -44,13 +44,32 @@
         <v-btn @click="recommendTeam" color="yellow">Recommend Team</v-btn>
       </v-col>
     </v-row>
+
+  <v-row v-if="swapButtonClicked">
+    <v-col>
+      <v-select
+          v-model="selectedOtherPokemon"
+          :items="otherPokemonsInCluster"
+          label="Select Pokémon to Swap"
+      ></v-select>
+    </v-col>
+    <v-col>
+      <v-btn @click="confirmSwap()" color="primary">Confirm Swap</v-btn>
+    </v-col>
+  </v-row>
   </div>
 </template>
 
 <script>
+
 export default {
+
   data() {
     return {
+      currentPokemon:null,
+      selectedOtherPokemon: null,
+      otherPokemonsInCluster: [],
+      swapButtonClicked: false,
       recommendedPokemon: [],
       teamImages: [],
       opponentType: null, // Default opponent type is null
@@ -96,13 +115,6 @@ export default {
         return defaultClass;
       }
     },
-
-    swapPokemon(pokemon) {
-      // You can use this method to handle the swap button click event
-      console.log(`Swapping ${pokemon.Name}`);
-      // Add your logic for swapping the Pokémon in the team
-    },
-
     navigateToPokemonDetails(pokemon) {
 
       this.$emit('navigateToPokemonDetails', pokemon.Name);
@@ -121,6 +133,84 @@ export default {
       const imagePath = require(`@/assets/pokeball.png`);
       return imagePath; // Fallback image or an empty string if no image is available
     },
+
+
+    async swapPokemon(pokemon) {
+      try {
+        // Identify the name of the Pokémon to be swapped out
+        const pokemonToSwapOut = pokemon.Name;
+        this.currentPokemon = pokemon.Name;
+        // Fetch data for the selected Pokemon
+        const response = await fetch(`http://127.0.0.1:5000/othersInCluster`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        // Find the data for the selected Pokemon
+        const selectedPokemonData = data.find(item => item.Recommended_Pokemon === pokemonToSwapOut);
+
+        // Update otherPokemonsInCluster with the data
+        this.otherPokemonsInCluster = selectedPokemonData
+            ? selectedPokemonData.Other_Pokemon_In_Cluster
+            : [];
+
+        // Check if the current pokemonName is in the otherPokemonsInCluster
+        const isPokemonInCluster = this.otherPokemonsInCluster.length > 0;
+
+        if (!isPokemonInCluster) {
+          console.warn(`${pokemonToSwapOut} is not found in the cluster.`);
+        }
+
+        // Set swapButtonClicked to true
+        this.swapButtonClicked = true;
+        // Send the data to the backend
+
+      } catch (error) {
+        console.error('Error swapping Pokémon:', error);
+      }
+    },
+
+    async sendSwapPokemonData(pokemonToSwapOut, selectedOtherPokemon) {
+      try {
+        // Make a POST request to your backend endpoint
+        const response = await fetch('http://127.0.0.1:5000/api/swapPokemon', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            pokemonToSwapOut,selectedOtherPokemon
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log(result); // Log the result from the backend
+
+        // You can handle the result from the backend as needed
+
+      } catch (error) {
+        console.error('Error sending :', error);
+      }
+    },
+
+    async confirmSwap() {
+      try {
+        const pokemonToSwapOut = this.currentPokemon;
+        console.log(`Swap ${pokemonToSwapOut} with ${this.selectedOtherPokemon}`)
+
+        await this.sendSwapPokemonData(pokemonToSwapOut, this.selectedOtherPokemon);
+
+      } catch (error) {
+      console.error('Error sending swap data to the backend:', error);
+    }
+    },
+
 
     setOpponentType(opponentTeamType) {
       this.opponentType = opponentTeamType;
@@ -154,9 +244,7 @@ export default {
       }
     },
 
-
-
-  },
+  }
 };
 </script>
 

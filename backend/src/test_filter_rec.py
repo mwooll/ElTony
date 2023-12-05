@@ -16,7 +16,8 @@ filtered_pokemon_data, json_data = filter_data(pokemon_data, filter_params)
 
 
 recommended_team_json,cluster_info_json, team_stats_json,others_in_cluster_json= get_recommendations(filtered_pokemon_data, opponent_type)
-print("cluster_info_json ")
+print("recommendation ")
+print(recommended_team_json)
 cluster_info_data = json.loads(cluster_info_json)
 
 for pokemon_info in cluster_info_data:

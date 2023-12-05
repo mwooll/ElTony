@@ -1,7 +1,7 @@
 import pandas as pd
 from flask import Flask, request, jsonify
 from filter import filter_data
-from poke_rec import get_recommendations
+from poke_rec import get_recommendations, swap_logic
 import csv
 from flask_cors import CORS
 from flask_restx import Resource, Api
@@ -48,8 +48,6 @@ def filter_endpoint():
 @app.route('/api/recommend', methods=['POST'])
 def recommend_endpoint():
     try:
-        print("Recommend")
-
         # Get opponentTeamType from the filter params as opponent type
         opponentType = request.json['opponentType']
         print(opponentType)
@@ -61,6 +59,7 @@ def recommend_endpoint():
         global clusterinfo  # Use the global variable
         global teamStats
         global othersinCluster
+        global recommendations
         recommendations, clusterinfo, teamStats, othersinCluster = get_recommendations(data_to_recommend, opponentType)
 
         return recommendations
@@ -97,7 +96,29 @@ class PokemonResource(Resource):
                 return pokemon.to_json()
 
         return {"error": "Pokémon not found"}, 404
+@app.route('/api/swapPokemon', methods=['POST'])
+def swap_pokemon_endpoint():
+    global recommendations
+    global othersinCluster
 
+    try:
+        # Get data from the frontend
+        data = request.json
+        print(data)
+        pokemon_to_swap_out = data['pokemonToSwapOut']
+        selected_other_pokemon = data['selectedOtherPokemon']
+        # Call swap_logic function
+        updated_recommendations, updated_othersinCluster = swap_logic(pokemon_to_swap_out, selected_other_pokemon, recommendations, othersinCluster)
+
+        # Update global variables
+        recommendations = updated_recommendations
+        othersinCluster = updated_othersinCluster
+
+        # You may want to return something to the frontend based on the swapping result
+        return jsonify({'status': 'success', 'message': 'Pokémon swapped successfully'})
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 @app.route('/cluster-info', methods=['GET'])
 def serve_cluster_info():
     # Return the global clusterinfo variable as JSON
