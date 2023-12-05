@@ -34,17 +34,27 @@
 
   export default {
     name: 'SpiderPlot',
-    props: ['pokemonStats', 'clusterStats'], // Add 'clusterStats' as a prop
+    props: ['pokemonStats', 'clusterStats'],
     watch: {
       pokemonStats: function(newStats) {
-        // Call drawSpiderPlot with both sets of stats
+        // Call drawSpiderPlot
         this.drawSpiderPlot(newStats, this.clusterStats);
       },
       clusterStats: function(newCluster) {
-        // Call drawSpiderPlot with both sets of stats
+        // Call drawSpiderPlot
         this.drawSpiderPlot(this.pokemonStats, newCluster);
       },
     },
+    data: () => ({
+      average: {
+        hp: 68.38002773925103,
+        attack: 75.01386962552012,
+        defense: 70.80859916782246,
+        spAtk: 68.7378640776699,
+        spDef: 69.29126213592232,
+        speed: 65.71428571428571
+    },
+    }),
 
     mounted() {
     this.drawSpiderPlot(this.pokemonStats, this.clusterStats);
@@ -91,6 +101,17 @@
             name: 'Cluster Pokemon',
             line: { color: 'yellow' },
             text: [clusterStats.hp, clusterStats.attack, clusterStats.defense, clusterStats.spAtk, clusterStats.spDef, clusterStats.speed].map(String),
+            hoverinfo: 'text', // Change the color of the second trace
+          },
+
+          {
+            type: 'scatterpolar',
+            r: [this.average.hp, this.average.attack, this.average.defense, this.average.spAtk, this.average.spDef, this.average.speed],
+            theta: ['HP', 'Attack', 'Defense', 'Sp. Atk', 'Sp. Def', 'Speed'],
+            fill: 'toself',
+            name: 'Average stats of Pokémon in the unfiltered set',
+            line: { color: 'grey' },
+            text: [this.average.hp, this.average.attack, this.average.defense, this.average.spAtk, this.average.spDef, this.average.speed].map(String),
             hoverinfo: 'text', // Change the color of the second trace
           },
         ];
