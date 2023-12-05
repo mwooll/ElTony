@@ -278,11 +278,11 @@ export default {
 }
 
 .dark-background {
-  background-color: #708090; /* Dark */
+  background-color: #705746; /* Dark */
 }
 
 .steel-background {
-  background-color: #705746; /* Steel */
+  background-color: #708090; /* Steel */
 }
 
 .fairy-background {
