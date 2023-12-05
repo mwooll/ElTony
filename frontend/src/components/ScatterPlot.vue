@@ -106,8 +106,8 @@ export default {
         'Rock': '#B6A136',
         'Ghost': '#735797',
         'Dragon': '#6F35FC',
-        'Dark': '#708090',
-        'Steel': '#705746',
+        'Dark': '#705746',
+        'Steel': '#708090',
         'Fairy': '#D685AD',
       };
 
