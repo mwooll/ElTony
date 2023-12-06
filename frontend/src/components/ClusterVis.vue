@@ -16,12 +16,12 @@ export default {
   watch: {
     highlightedPokemon: function (newPokemon) {
       this.selectedPokemonName = newPokemon;
-      this.updateMarkerColors();
     },
 
   },
   data() {
     return {
+      otherPokemonsInCluster: [],
       clusterData: [],
       clusterInfo: {
         x: [],
@@ -59,7 +59,18 @@ export default {
       }
     },
     drawScatterPCA() {
-      const markerColors = this.clusterInfo.name.map(name => (name === this.selectedPokemonName ? 'red' : 'grey'));
+      //const markerColors = this.clusterInfo.name.map(name => (name === this.selectedPokemonName ? 'red' : 'yellow'));
+      const markerColors = this.clusterInfo.name.map(name => {
+        if (name === this.selectedPokemonName) {
+          return 'red'; // Selected Pokemon
+        } else if (this.otherPokemonsInCluster.includes(name)) {
+          return 'dark red'; // Other Pokémon in the cluster
+        } else {
+          return 'yellow'; // Default color
+        }
+      });
+
+
       const markerSize = this.clusterInfo.name.map(name => (name === this.selectedPokemonName ? 8 : 5));
       this.sendPokeData(this.selectedPokemonName)
       const trace1 = {
@@ -135,24 +146,24 @@ export default {
         });
 
         this.$emit('pokemonSelectedCluster', this.clusterData);
+
         console.log('Event emitted:', this.clusterData);
+        const responseOthers = await fetch(`http://127.0.0.1:5000/othersInCluster`);
+        const otherClusterInfo = await responseOthers.json();
+
+        // Find the cluster information for the selected Pokemon
+        const selectedCluster = otherClusterInfo.find(cluster => cluster.Recommended_Pokemon === selectedPokemonName);
+
+        if (selectedCluster) {
+          this.otherPokemonsInCluster = selectedCluster.Other_Pokemon_In_Cluster;
+        } else {
+          this.otherPokemonsInCluster = [];
+        }
       } catch (error) {
         console.error('Error fetching additional Pokemon data:', error);
       }
     },
 // Add a new method to update marker colors
-    updateMarkerColors() {
-      const markerColors = this.clusterInfo.name.map(name => (name === this.selectedPokemonName ? 'red' : 'grey'));
-      const markerSize = this.clusterInfo.name.map(name => (name === this.selectedPokemonName ? 8 : 5));
-      const updatedTrace = {
-        marker: {
-          size: markerSize,
-          color: markerColors,
-        },
-      };
-
-      Plotly.react('PCAScatter', [updatedTrace]);
-    },
 
   },
 };
