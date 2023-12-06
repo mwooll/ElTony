@@ -14,7 +14,7 @@
 
     <v-row>
       <!-- Team images with name, key feature, and swap button -->
-      <v-col v-for="(pokemon, index) in recommendedPokemon" :key="index" cols="2">
+      <v-col v-for="(pokemon, index) in recommendedPokemon" :key="index" cols="4">
         <v-row align="center" justify="center">
           <div @click="navigateToPokemonDetails(pokemon)">
             <v-img :src="getPokemonImage(pokemon.image)" height="120" width="120" align="center"></v-img>
@@ -45,18 +45,18 @@
       </v-col>
     </v-row>
 
-  <v-row v-if="swapButtonClicked">
-    <v-col>
-      <v-select
-          v-model="selectedOtherPokemon"
-          :items="otherPokemonsInCluster"
-          label="Select Pokémon to Swap"
-      ></v-select>
-    </v-col>
-    <v-col>
-      <v-btn @click="confirmSwap()" color="primary">Confirm Swap</v-btn>
-    </v-col>
-  </v-row>
+    <v-row v-if="swapButtonClicked">
+      <v-col>
+        <v-select
+            v-model="selectedOtherPokemon"
+            :items="otherPokemonsInCluster"
+            label="Select Pokémon to Swap"
+        ></v-select>
+      </v-col>
+      <v-col>
+        <v-btn @click="confirmSwap()" color="primary">Confirm Swap</v-btn>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -207,8 +207,8 @@ export default {
         await this.sendSwapPokemonData(pokemonToSwapOut, this.selectedOtherPokemon);
         this.recommendTeam()
       } catch (error) {
-      console.error('Error sending swap data to the backend:', error);
-    }
+        console.error('Error sending swap data to the backend:', error);
+      }
     },
 
 
@@ -252,7 +252,7 @@ export default {
   justify-content: center;
   align-items: center;
 //flex-direction: column;
-  height: 50vh;
+  height: 80vh;
 }
 .swap{
   margin-top: 5px;
