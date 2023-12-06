@@ -118,7 +118,7 @@ export default {
     navigateToPokemonDetails(pokemon) {
 
       this.$emit('navigateToPokemonDetails', pokemon.Name);
-      this.$emit('highlightSelectedPokemon', pokemon.index);
+      this.$emit('highlightSelectedPokemon', pokemon.Name);
 
 
       console.log(`Clicked on ${pokemon.Name}. Redirect to details page.`);

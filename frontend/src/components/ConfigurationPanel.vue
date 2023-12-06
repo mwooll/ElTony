@@ -32,14 +32,12 @@
         </v-col>
 
         <!-- Right: Team Section -->
-        <v-col cols="12" md="6" lg="4" class="columns">
+        <v-col cols="auto" md="6" lg="4" class="columns">
           <v-row>
             <v-col >
               <TeamSection @navigateToPokemonDetails="handleNavigateToPokemon"/>
             </v-col>
           </v-row>
-
-          <!-- bottom right: Cluster Vis -->
           <v-row>
             <v-col>
               <ClusterVis
