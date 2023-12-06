@@ -164,18 +164,27 @@ export default {
 
       Plotly.newPlot('myScatterPlot', traces, layout, config);
       document.getElementById('myScatterPlot').on('plotly_click', function (data) {
-        var pointIndex = data.points[0].pointIndex;
-        this.selectedPokemonStats = {
-          name: this.ScatterPlotData.name[pointIndex],
-          hp: this.ScatterPlotData.hp[pointIndex],
-          attack: this.ScatterPlotData.attack[pointIndex],
-          defense: this.ScatterPlotData.defense[pointIndex],
-          spAtk: this.ScatterPlotData.spAtk[pointIndex],
-          spDef: this.ScatterPlotData.spDef[pointIndex],
-          speed: this.ScatterPlotData.speed[pointIndex],
-          image: this.ScatterPlotData.image[pointIndex],
-        };
-        this.$emit('pokemonSelected', this.selectedPokemonStats);
+        var selectedPokemonName = data.points[0].text;
+
+        // Find the selected Pokémon by name in your data
+        var selectedPokemon = this.ScatterPlotData.name.findIndex(pokemonName => pokemonName === selectedPokemonName);
+
+        if (selectedPokemon !== -1) {
+          this.selectedPokemonStats = {
+            name: this.ScatterPlotData.name[selectedPokemon],
+            hp: this.ScatterPlotData.hp[selectedPokemon],
+            attack: this.ScatterPlotData.attack[selectedPokemon],
+            defense: this.ScatterPlotData.defense[selectedPokemon],
+            spAtk: this.ScatterPlotData.spAtk[selectedPokemon],
+            spDef: this.ScatterPlotData.spDef[selectedPokemon],
+            speed: this.ScatterPlotData.speed[selectedPokemon],
+            image: this.ScatterPlotData.image[selectedPokemon],
+          };
+          console.log("Logging the selected Pokemon");
+          console.log(this.selectedPokemonStats.name);
+
+          this.$emit('pokemonSelected', this.selectedPokemonStats);
+        }
       }.bind(this));
     },
   },

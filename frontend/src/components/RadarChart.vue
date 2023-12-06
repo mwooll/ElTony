@@ -74,7 +74,7 @@
         const imagePath = require(`@/assets/pokeball.png`);
         return imagePath; // Fallback image or an empty string if no image is available
       },
-        
+
       drawSpiderPlot(stats, clusterStats) {
         // Check if both sets of stats are available
         if (!stats || !clusterStats) {
@@ -117,7 +117,7 @@
         ];
 
         var layout = {
-          
+
           margin: {
             t: 30  // Top margin, increase this value to add more space above the chart
           },
@@ -130,7 +130,7 @@
             },
           },
           paper_bgcolor: 'rgba(0,0,0,0)',  // Transparent background for the whole chart
-          plot_bgcolor: 'rgba(0,0,0,0)',  
+          plot_bgcolor: 'rgba(0,0,0,0)',
           showlegend: true,
           legend: {
             orientation: "h", // Set legend orientation to horizontal
@@ -138,7 +138,7 @@
             xanchor: "center",
             y: -0.2, // Position the legend below the chart
             yanchor: "bottom"
-          },      
+          },
         };
 
         Plotly.newPlot('mySpiderPlot', data, layout);
