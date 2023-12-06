@@ -1,4 +1,5 @@
 import pandas as pd
+from fastapi import requests
 from flask import Flask, request, jsonify
 from filter import filter_data
 from poke_rec import get_recommendations, swap_logic
@@ -16,7 +17,7 @@ pokemon_data = pd.read_csv('pokemon.csv')
 clusterinfo = []  # Initialize clusterinfo to an empty list
 teamStats = []
 filtered_pokemon_data = pd.DataFrame()
-
+swapped = False
 @app.route('/api/filter', methods=['OPTIONS'])
 def handle_options_request():
     response = jsonify({'status': 'OK'})
@@ -44,6 +45,25 @@ def filter_endpoint():
             return jsonify({'message': 'No filter applied. Using all data.'})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+@app.route('/api/recomputeRecommendations', methods=['GET'])
+def recompute_recommendations_endpoint():
+    try:
+        global swapped
+
+        # Check if re-computation of recommendations is necessary
+        if swapped:
+            # Call the recommend_endpoint logic
+            updated_recommendations = recommend_endpoint()
+            swapped = False  # Reset the swapped flag
+
+            return updated_recommendations
+
+        # If no re-computation is needed, return a message or appropriate response
+        return jsonify({'message': 'No re-computation needed'})
+
+    except Exception as e:
+        print("Error in recompute_recommendations_endpoint:", e)
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/recommend', methods=['POST'])
 def recommend_endpoint():
@@ -60,7 +80,16 @@ def recommend_endpoint():
         global teamStats
         global othersinCluster
         global recommendations
-        recommendations, clusterinfo, teamStats, othersinCluster = get_recommendations(data_to_recommend, opponentType)
+        global swapped
+
+        if swapped == True:
+            print("SWAPPED RECS ")
+            recommendations = new_recommendations
+            othersinCluster = new_othersinCluster
+            print("SWAPPED RECS ")
+            swapped = False
+        else:
+            recommendations, clusterinfo, teamStats, othersinCluster = get_recommendations(data_to_recommend, opponentType)
 
         return recommendations
 
@@ -98,26 +127,40 @@ class PokemonResource(Resource):
         return {"error": "Pokémon not found"}, 404
 @app.route('/api/swapPokemon', methods=['POST'])
 def swap_pokemon_endpoint():
-    global recommendations
-    global othersinCluster
+    global new_recommendations
+    global new_othersinCluster
 
     try:
         # Get data from the frontend
         data = request.json
-        print(data)
-        pokemon_to_swap_out = data['pokemonToSwapOut']
-        selected_other_pokemon = data['selectedOtherPokemon']
+        print("Received swap data:", data)
+
+        # Ensure required data is present
+        pokemon_to_swap_out = data.get('pokemonToSwapOut')
+        selected_other_pokemon = data.get('selectedOtherPokemon')
+
+        if not (pokemon_to_swap_out and selected_other_pokemon):
+            raise ValueError("Missing required data for swap operation.")
+
         # Call swap_logic function
-        updated_recommendations, updated_othersinCluster = swap_logic(pokemon_to_swap_out, selected_other_pokemon, recommendations, othersinCluster)
+        updated_recommendations, updated_othersinCluster = swap_logic(
+            pokemon_to_swap_out, selected_other_pokemon, recommendations, othersinCluster
+        )
 
         # Update global variables
-        recommendations = updated_recommendations
-        othersinCluster = updated_othersinCluster
+        new_recommendations = updated_recommendations
+        new_othersinCluster = updated_othersinCluster
 
-        # You may want to return something to the frontend based on the swapping result
-        return jsonify({'status': 'success', 'message': 'Pokémon swapped successfully'})
+        print("Updated othersinCluster:", new_othersinCluster)
+
+        global swapped
+        swapped = True
+
+        # Call recommend_endpoint
+        return new_recommendations
 
     except Exception as e:
+        print("Error in swap_pokemon_endpoint:", e)
         return jsonify({'error': str(e)}), 500
 @app.route('/cluster-info', methods=['GET'])
 def serve_cluster_info():

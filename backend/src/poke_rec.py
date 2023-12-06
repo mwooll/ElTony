@@ -188,32 +188,27 @@ def get_recommendations(filtered_dataset, opponent_type):
 
 def swap_logic(pokemon_to_swap_out, selected_other_pokemon, recommendations, othersinCluster):
     pokemon_data = pd.read_csv('pokemon.csv')
-
     recommendations = json.loads(recommendations)
     othersinCluster = json.loads(othersinCluster)
     print("inside Swap logic")
     # Iterate through recommendations
-    print(recommendations)
-    print(othersinCluster)
     for rec in recommendations:
         if rec['Name'] == pokemon_to_swap_out:
             # Swap the Pokemon in recommendations
             rec['Name'] = selected_other_pokemon
             # Retrieve the stats of the selected other Pokemon from the CSV
             selected_other_pokemon_stats = pokemon_data.loc[pokemon_data['Name'] == selected_other_pokemon].to_dict(orient='records')[0]
-            print(selected_other_pokemon_stats)
             rec.update(selected_other_pokemon_stats)
-            print(rec)
     # Iterate through othersinCluster
     for cluster in othersinCluster:
+        print(cluster)
         if cluster['Recommended_Pokemon'] == pokemon_to_swap_out:
-            # Swap the Pokemon in othersinCluster
             cluster['Recommended_Pokemon'] = selected_other_pokemon
-            cluster['Other_Pokemon_In_Cluster'] = [selected_other_pokemon]
 
-    # Convert back to JSON
+            for i, pokemon in enumerate(cluster['Other_Pokemon_In_Cluster']):
+                if pokemon == selected_other_pokemon:
+                    cluster['Other_Pokemon_In_Cluster'][i] = pokemon_to_swap_out
+
     recommendations = json.dumps(recommendations)
     othersinCluster = json.dumps(othersinCluster)
-    print(recommendations)
-    print(othersinCluster)
     return recommendations, othersinCluster

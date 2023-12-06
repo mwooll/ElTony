@@ -189,9 +189,9 @@ export default {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
-        const result = await response.json();
-        console.log(result); // Log the result from the backend
-
+        const recommendation = await response.json();
+        console.log(recommendation); // Log the result from the backend
+        this.swapButtonClicked = false;
         // You can handle the result from the backend as needed
 
       } catch (error) {
@@ -205,7 +205,7 @@ export default {
         console.log(`Swap ${pokemonToSwapOut} with ${this.selectedOtherPokemon}`)
 
         await this.sendSwapPokemonData(pokemonToSwapOut, this.selectedOtherPokemon);
-
+        this.recommendTeam()
       } catch (error) {
       console.error('Error sending swap data to the backend:', error);
     }
@@ -217,9 +217,7 @@ export default {
     },
     async recommendTeam() {
       try {
-        // Check if opponentTeamType is selected, if not, set it to 'None'
 
-        // Call the backend to get recommended Pokemon data based on filters or any other logic
         const recommendationResponse = await fetch('http://127.0.0.1:5000/api/recommend', {
           method: 'POST',
           headers: {
