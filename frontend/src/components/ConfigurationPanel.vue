@@ -2,19 +2,44 @@
   <div>
     <v-container fluid class='container'>
       <v-row class="rows">
-        <!-- Top left -->
-        <v-col cols="12" md="6" lg="8" class="columns">
+        <!-- Left: Scatter Plot -->
+        <v-col cols="12" md="6" lg="4" class = "columns">
+          <ScatterPlot :key="scatterPlotId"
+                       :selectedCategory="pokemons.selectedValue"
+                       @pokemonSelected="handlePokemonSelection"
+                       :data="scatterPlotData"
+                       @expandPlotEvent="handleExpandPlot"
+          />
+        </v-col>
+
+        <!-- Middle: Radar Chart  -->
+        <v-col cols="12" md="6" lg="4" class = "columns">
+          <v-row>
+            <v-col >
+              <SpiderPlot :pokemonStats="selectedPokemonStats"
+                          :cluster-stats="selectedClusterStats"
+                          :series="formattedSeriesForRadarChart"
+                          @reset-data="handleReset"
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col >
+              <SpiderPlotTeam
+              />
+            </v-col>
+          </v-row>
+        </v-col>
+
+        <!-- Right: Team Section -->
+        <v-col cols="12" md="6" lg="4" class="columns">
           <v-row>
             <v-col >
               <TeamSection @navigateToPokemonDetails="handleNavigateToPokemon"/>
-
             </v-col>
-
           </v-row>
 
-        </v-col>
-        <!-- Top middle -->
-        <v-col cols="12" md="6" lg="4" class="columns" >
+          <!-- bottom right: Cluster Vis -->
           <v-row>
             <v-col>
               <ClusterVis
@@ -27,30 +52,7 @@
             </v-col>
           </v-row>
         </v-col>
-      </v-row>
-      <v-row class="rows">
-        <v-col cols="12" md="6" lg="4" class = "columns">
-          <ScatterPlot :key="scatterPlotId"
-                       :selectedCategory="pokemons.selectedValue"
-                       @pokemonSelected="handlePokemonSelection"
-                       :data="scatterPlotData"
-                       @expandPlotEvent="handleExpandPlot"
-          /> </v-col>
-        <!--Spider Chart -->
-        <v-col cols="12" md="6" lg="4" class = "columns">
-          <SpiderPlot :pokemonStats="selectedPokemonStats"
-                      :cluster-stats="selectedClusterStats"
-                      :series="formattedSeriesForRadarChart"
-                      @reset-data="handleReset"
-                      />
-        </v-col>
 
-        <!-- Bottom right -->
-        <v-col cols="12" md="6" lg="4" class="columns">
-          
-          <SpiderPlotTeam
-          />
-        </v-col>
       </v-row>
     </v-container>
   </div>
@@ -142,7 +144,7 @@ export default {
     },
 
     handleReset() {
-    this.selectedPokemonStats = {
+      this.selectedPokemonStats = {
         hp: 0,
         attack: 0,
         defense: 0,
@@ -162,10 +164,10 @@ export default {
     },
 
     handleExpandPlot() {
-    // You can emit another event that App.vue will listen to
-    this.$emit('expandScatterPlot');
-    
-  },
+      // You can emit another event that App.vue will listen to
+      this.$emit('expandScatterPlot');
+
+    },
     showFullPagePlot() {
     },
 
