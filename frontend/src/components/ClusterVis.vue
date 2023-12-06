@@ -61,7 +61,7 @@ export default {
     drawScatterPCA() {
       const markerColors = this.clusterInfo.name.map(name => (name === this.selectedPokemonName ? 'red' : 'grey'));
       const markerSize = this.clusterInfo.name.map(name => (name === this.selectedPokemonName ? 8 : 5));
-
+      this.sendPokeData(this.selectedPokemonName)
       const trace1 = {
         x: this.clusterInfo.x,
         y: this.clusterInfo.y,
@@ -112,36 +112,38 @@ export default {
         const pointIndex = data.points[0].pointIndex;
         const selectedPokemonName = this.clusterInfo.name[pointIndex];
         console.log('Selected Pokemon:', selectedPokemonName);
-        try {
-          const response = await fetch(`http://127.0.0.1:5000/pokemons/${selectedPokemonName}`);
-          const additionalStats = await response.json();
-          console.log('Selected Pokemon stats:', additionalStats);
-
-          this.clusterData = [];
-
-          this.clusterData.push({
-            name: additionalStats.Name,
-            hp: additionalStats.HP,
-            attack: additionalStats.Attack,
-            defense: additionalStats.Defense,
-            spAtk: additionalStats.Sp_Atk,
-            spDef: additionalStats.Sp_Def,
-            speed: additionalStats.Speed,
-            image: additionalStats.image,
-          });
-
-          this.$emit('pokemonSelectedCluster', this.clusterData);
-          console.log('Event emitted:', this.clusterData);
-        } catch (error) {
-          console.error('Error fetching additional Pokemon data:', error);
-        }
+        await this.sendPokeData(selectedPokemonName)
       });
+    },
+    async sendPokeData(selectedPokemonName){
+      try {
+        const response = await fetch(`http://127.0.0.1:5000/pokemons/${selectedPokemonName}`);
+        const additionalStats = await response.json();
+        console.log('Selected Pokemon stats:', additionalStats);
+
+        this.clusterData = [];
+
+        this.clusterData.push({
+          name: additionalStats.Name,
+          hp: additionalStats.HP,
+          attack: additionalStats.Attack,
+          defense: additionalStats.Defense,
+          spAtk: additionalStats.Sp_Atk,
+          spDef: additionalStats.Sp_Def,
+          speed: additionalStats.Speed,
+          image: additionalStats.image,
+        });
+
+        this.$emit('pokemonSelectedCluster', this.clusterData);
+        console.log('Event emitted:', this.clusterData);
+      } catch (error) {
+        console.error('Error fetching additional Pokemon data:', error);
+      }
     },
 // Add a new method to update marker colors
     updateMarkerColors() {
       const markerColors = this.clusterInfo.name.map(name => (name === this.selectedPokemonName ? 'red' : 'grey'));
       const markerSize = this.clusterInfo.name.map(name => (name === this.selectedPokemonName ? 8 : 5));
-
       const updatedTrace = {
         marker: {
           size: markerSize,
