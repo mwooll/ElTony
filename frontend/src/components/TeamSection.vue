@@ -37,25 +37,18 @@
         </v-row>
       </v-col>
     </v-row>
-
-    <!-- Recommend Team Button -->
     <v-row>
       <v-col cols="12" class="recommend-row">
         <v-btn @click="recommendTeam" color="yellow">Recommend Team</v-btn>
       </v-col>
     </v-row>
-
     <v-row v-if="swapButtonClicked">
-      <v-col>
         <v-select
             v-model="selectedOtherPokemon"
             :items="otherPokemonsInCluster"
             label="Select Pokémon to Swap"
         ></v-select>
-      </v-col>
-      <v-col>
         <v-btn @click="confirmSwap()" color="primary">Confirm Swap</v-btn>
-      </v-col>
     </v-row>
   </div>
 </template>
@@ -233,6 +226,7 @@ export default {
         }
 
         const recommendedPokemon = await recommendationResponse.json();
+        this.$emit('recommendationMade', recommendedPokemon);
 
         this.recommendedPokemon = recommendedPokemon;
 
@@ -252,7 +246,6 @@ export default {
   justify-content: center;
   align-items: center;
 //flex-direction: column;
-  height: 80vh;
 }
 .swap{
   margin-top: 5px;

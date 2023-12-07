@@ -1,56 +1,54 @@
 <template>
   <div>
-    <v-container fluid class='container'>
+    <v-container fluid class="container">
       <v-row class="rows">
         <!-- Left: Scatter Plot -->
-        <v-col cols="12" md="6" lg="4" class = "columns">
-          <ScatterPlot :key="scatterPlotId"
-                       :selectedCategory="pokemons.selectedValue"
-                       @pokemonSelected="handlePokemonSelection"
-                       :data="scatterPlotData"
-                       @expandPlotEvent="handleExpandPlot"
+        <v-col cols="12" md="6" lg="4" class="columns">
+          <ScatterPlot
+              :key="scatterPlotId"
+              :selectedCategory="pokemons.selectedValue"
+              @pokemonSelected="handlePokemonSelection"
+              :data="scatterPlotData"
+              @expandPlotEvent="handleExpandPlot"
           />
         </v-col>
 
         <!-- Middle: Radar Chart  -->
-        <v-col cols="12" md="6" lg="4" class = "columns">
+        <v-col cols="12" md="6" lg="4" class="columns">
           <v-row>
-            <v-col >
-              <SpiderPlot :pokemonStats="selectedPokemonStats"
-                          :cluster-stats="selectedClusterStats"
-                          :series="formattedSeriesForRadarChart"
-                          @reset-data="handleReset"
+            <v-col>
+              <SpiderPlot
+                  :pokemonStats="selectedPokemonStats"
+                  :cluster-stats="selectedClusterStats"
+                  :series="formattedSeriesForRadarChart"
+                  @reset-data="handleReset"
               />
             </v-col>
           </v-row>
           <v-row>
-            <v-col >
-              <SpiderPlotTeam
-              />
+            <v-col>
+              <SpiderPlotTeam />
             </v-col>
           </v-row>
         </v-col>
 
         <!-- Right: Team Section -->
-        <v-col cols="auto" md="6" lg="4" class="columns">
-          <v-row>
-            <v-col >
-              <TeamSection @navigateToPokemonDetails="handleNavigateToPokemon"/>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col>
+        <v-col cols="12" md="12" lg="4" class="columns">
+
+
+              <TeamSection @recommendationMade="updateRecommendedPokemon" @navigateToPokemonDetails="handleNavigateToPokemon" />
               <ClusterVis
+                  v-if="recommendedPokemon.length > 0"
+
                   :key="PCAScatter"
                   :selectedCategory="pokemons.selectedValue"
                   @pokemonSelectedCluster="handleClusterSelection"
                   :data="scatterPlotData"
                   :highlightedPokemon="highlightedPokemon"
               />
-            </v-col>
-          </v-row>
-        </v-col>
 
+
+        </v-col>
       </v-row>
     </v-container>
   </div>
@@ -67,6 +65,8 @@ import ClusterVis from './ClusterVis'; // Import ClusterVis component
 export default {
   components: {ScatterPlot, SpiderPlot, SpiderPlotTeam,TeamSection,ClusterVis},
   data: () => ({
+    recommendedPokemon: [],
+
     scatterPlotId: 0,
     PCAScatter: 0,
     linePlotId: 0,
@@ -136,6 +136,10 @@ export default {
   },
 
   methods: {
+    updateRecommendedPokemon(recommendedPokemon) {
+      this.recommendedPokemon = recommendedPokemon;
+    },
+
     handleNavigateToPokemon(pokeName) {
       // Update the highlighted Pokemon
       this.highlightedPokemon = pokeName;

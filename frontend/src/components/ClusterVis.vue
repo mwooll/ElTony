@@ -1,9 +1,9 @@
 <template>
   <div>
-    <v-row align="top" justify="t" className="mt-1 mb-0">
-      <h3 align="center"> Cluster Information </h3>
+    <v-row align="start" justify="center" className="mt-0 mb-0">
+      <h3 > Cluster Information </h3>
     </v-row>
-    <div id="PCAScatter" style="height: 400px;"></div>
+    <div id="PCAScatter" style="height: auto;"></div>
   </div>
 </template>
 
