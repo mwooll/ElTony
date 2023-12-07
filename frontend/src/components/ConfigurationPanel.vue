@@ -27,7 +27,9 @@
           </v-row>
           <v-row>
             <v-col>
-              <SpiderPlotTeam />
+              <SpiderPlotTeam
+                  v-if="recommendedPokemon.length > 0"
+              />
             </v-col>
           </v-row>
         </v-col>
