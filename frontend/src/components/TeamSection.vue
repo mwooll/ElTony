@@ -45,7 +45,7 @@
       </v-col>
     </v-row>
 
-    <v-row v-if="swapButtonClicked">
+    <v-row class="swap-button" v-if="swapButtonClicked">
       <v-select
           v-model="selectedOtherPokemon"
           :items="otherPokemonsInCluster"
@@ -244,6 +244,10 @@ export default {
 </script>
 
 <style scoped>
+.swap-button {
+  margin-top: 30px;
+}
+
 .team-title {
   margin-top: 40px;
   margin-bottom: 10px;
