@@ -31,9 +31,9 @@
           <div class="pokemon-details-wrapper">
             <!-- Pokemon details container -->
             <div class="pokemon-details" :class="getPokemonTypeClass(pokemon.Types)">
-              <p>{{ pokemon.Name }}</p>
-              <p>{{ displayType(pokemon.Types) }}</p>
-              <p>{{ pokemon.Key_Feature }}</p>
+              <p style="font-size: 18px;"><b>{{ pokemon.Name }}</b></p>
+              <p style="font-size: 14px;">{{ displayType(pokemon.Types) }}</p>
+              <p style="font-size: 14px;">{{ pokemon.Key_Feature }}</p>
               <!-- Swap button -->
               <v-btn @click="swapPokemon(pokemon)" color="primary" class="swap" icon fab><v-icon>
                 mdi-swap-horizontal
@@ -51,7 +51,7 @@
           :items="otherPokemonsInCluster"
           label="Select Pokémon to Swap"
       ></v-select>
-      <v-btn @click="confirmSwap()" color="primary">Confirm Swap</v-btn>
+      <v-btn @click="confirmSwap()" color="primary">CONFIRM</v-btn>
     </v-row>
   </div>
 </template>
@@ -111,6 +111,7 @@ export default {
         return defaultClass;
       }
     },
+
     displayType(typing) {
       let splitted = typing.split(",")
       console.log(splitted)
@@ -268,10 +269,10 @@ export default {
 }
 
 .container {
-  display: flex;
+  //display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
+  //flex-direction: column;
 }
 .swap{
   margin-top: 5px;
@@ -287,7 +288,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 120px; /* Set the desired height for consistency */
+  height: 120px;
 }
 
 .pokemon-details {
@@ -295,9 +296,9 @@ export default {
   text-align: center;
   font-size: small;
   padding: 12px;
-  border-radius: 10px;
-  width: 100px;
-  height: 120px;
+  border-radius: 12px;
+  width: 120px;
+  height: 140px;
 }
 
 .image-container {
