@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-row align="start" justify="center" className="mt-0 mb-0">
-      <h3 > Cluster Information </h3>
+    <v-row align="center" justify="center" className="mt-1 mb-0">
+      <h3 > Visualization of the Cluster used for Recommendation </h3>
     </v-row>
     <div id="PCAScatter" style="height: auto;"></div>
   </div>

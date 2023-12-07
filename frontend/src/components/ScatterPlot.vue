@@ -4,7 +4,7 @@
       <v-icon>mdi-fullscreen</v-icon>
     </v-btn>
     <v-row align="center" justify="center" className="mt-1 mb-0">
-      <h3 align="center"> Attack/Defense </h3>
+      <h3 align="center"> Dataset used for the Recommender </h3>
     </v-row>
     <div style="height: 50vh">
       <div id="myScatterPlot" style="width: 100%; height: 100%;" @plotly_click="scatterClick"></div>

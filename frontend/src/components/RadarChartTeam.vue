@@ -3,7 +3,7 @@
       <v-icon>mdi-fullscreen</v-icon>
     </v-btn>
   <v-row align="center" justify="center" className="mt-1 mb-0">
-    <h3 align = "center">Team Stats</h3>
+    <h3 align = "center">Average Stats for Recommended Team</h3>
   </v-row>
   <div>
     <div id="mySpiderPlotTeam" style="height: inherit"></div>

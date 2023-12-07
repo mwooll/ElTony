@@ -1,5 +1,8 @@
 <template>
   <div class="container">
+    <v-row align="center" justify="center" className="mt-1 mb-0">
+      <h3 align = "center">Get a Team recommendation</h3>
+    </v-row>
     <v-row>
       <!-- Dropdown menu for selecting opponent type -->
       <v-col cols="12" class="typeselection">
