@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <v-row align="center" justify="center" className="mt-1 mb-0">
-      <h3 align = "center">Get a Team recommendation</h3>
+      <h3 class="team-title" align = "center">Get a Team Recommendation</h3>
     </v-row>
     <v-row>
       <!-- Dropdown menu for selecting opponent type -->
@@ -46,12 +46,12 @@
     </v-row>
 
     <v-row v-if="swapButtonClicked">
-        <v-select
-            v-model="selectedOtherPokemon"
-            :items="otherPokemonsInCluster"
-            label="Select Pokémon to Swap"
-        ></v-select>
-        <v-btn @click="confirmSwap()" color="primary">Confirm Swap</v-btn>
+      <v-select
+          v-model="selectedOtherPokemon"
+          :items="otherPokemonsInCluster"
+          label="Select Pokémon to Swap"
+      ></v-select>
+      <v-btn @click="confirmSwap()" color="primary">Confirm Swap</v-btn>
     </v-row>
   </div>
 </template>
@@ -244,6 +244,17 @@ export default {
 </script>
 
 <style scoped>
+.team-title {
+  margin-top: 40px;
+  margin-bottom: 10px;
+}
+
+.recommend-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .container {
 //display: flex;
   justify-content: center;
@@ -292,12 +303,6 @@ export default {
   flex-wrap: wrap;
 }
 
-.recommend-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 30px;
-}
 
 .fire-background {
   background-color: #EE8130; /* Fire */

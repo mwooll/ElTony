@@ -175,6 +175,6 @@ export default {
 }
 
 .cluster-title {
-  margin-top: 100px;
+  margin-top: 80px;
 }
 </style>
