@@ -86,7 +86,8 @@ def recommend_endpoint():
             print("SWAPPED RECS ")
             recommendations = new_recommendations
             othersinCluster = new_othersinCluster
-            print("SWAPPED RECS ")
+            teamStats = new_teamStat
+            print("TEAM STATS")
             swapped = False
         else:
             recommendations, clusterinfo, teamStats, othersinCluster = get_recommendations(data_to_recommend, opponentType)
@@ -129,7 +130,7 @@ class PokemonResource(Resource):
 def swap_pokemon_endpoint():
     global new_recommendations
     global new_othersinCluster
-
+    global new_teamStat
     try:
         # Get data from the frontend
         data = request.json
@@ -143,14 +144,14 @@ def swap_pokemon_endpoint():
             raise ValueError("Missing required data for swap operation.")
 
         # Call swap_logic function
-        updated_recommendations, updated_othersinCluster = swap_logic(
+        updated_recommendations, updated_othersinCluster, updated_teamStat= swap_logic(
             pokemon_to_swap_out, selected_other_pokemon, recommendations, othersinCluster
         )
 
         # Update global variables
         new_recommendations = updated_recommendations
         new_othersinCluster = updated_othersinCluster
-
+        new_teamStat = updated_teamStat
         print("Updated othersinCluster:", new_othersinCluster)
 
         global swapped

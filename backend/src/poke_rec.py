@@ -152,9 +152,12 @@ def get_recommendations(filtered_dataset, opponent_type):
     for _, pokemon in recommended_team.iterrows():
         for stat, value in pokemon.items():
             # Exclude Type_1 and Type_2 from averaging
-            if stat not in ["Type_1", "Type_2", "Name", "Types", "Cluster", "Key_Feature","image"]:
-                average_stats[stat] = average_stats.get(stat, 0) + value / num_pokemon
+            for stat in numeric_features:
+                # Exclude Type_1 and Type_2 from averaging
+                    average_stats[stat] = recommended_team[stat].mean()
 
+    print("original rec stats")
+    print(average_stats)
     othersInCluster = []
     for _, pokemon in recommended_team.iterrows():
         cluster_id = int(pokemon['Cluster'])
@@ -191,24 +194,41 @@ def swap_logic(pokemon_to_swap_out, selected_other_pokemon, recommendations, oth
     recommendations = json.loads(recommendations)
     othersinCluster = json.loads(othersinCluster)
     print("inside Swap logic")
+    selected_columns = ['HP', 'Attack', 'Defense', 'Sp_Atk', 'Sp_Def', 'Speed', 'Type_1', 'Type_2', 'image']
+
     # Iterate through recommendations
     for rec in recommendations:
         if rec['Name'] == pokemon_to_swap_out:
             # Swap the Pokemon in recommendations
             rec['Name'] = selected_other_pokemon
             # Retrieve the stats of the selected other Pokemon from the CSV
-            selected_other_pokemon_stats = pokemon_data.loc[pokemon_data['Name'] == selected_other_pokemon].to_dict(orient='records')[0]
+            selected_other_pokemon_stats = \
+            pokemon_data.loc[pokemon_data['Name'] == selected_other_pokemon, selected_columns].to_dict(
+                orient='records')[0]
+
             rec.update(selected_other_pokemon_stats)
     # Iterate through othersinCluster
     for cluster in othersinCluster:
-        print(cluster)
         if cluster['Recommended_Pokemon'] == pokemon_to_swap_out:
             cluster['Recommended_Pokemon'] = selected_other_pokemon
 
             for i, pokemon in enumerate(cluster['Other_Pokemon_In_Cluster']):
                 if pokemon == selected_other_pokemon:
                     cluster['Other_Pokemon_In_Cluster'][i] = pokemon_to_swap_out
+    average_stats = {}
+    num_pokemon = len(recommendations)
+    print("Recommendations")
+    print(recommendations)
+    for pokemon in recommendations:
+        for stat, value in pokemon.items():
+            # Exclude Type_1 and Type_2 from averaging
+            if stat not in ["Type_1", "Type_2", "Name", "Types", "Cluster", "Key_Feature", "image"]:
+                average_stats[stat] = average_stats.get(stat, 0) + int(value) / num_pokemon
 
+
+
+    print(average_stats)
     recommendations = json.dumps(recommendations)
     othersinCluster = json.dumps(othersinCluster)
-    return recommendations, othersinCluster
+
+    return recommendations, othersinCluster,average_stats

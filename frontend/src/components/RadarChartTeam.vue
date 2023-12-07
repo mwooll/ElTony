@@ -47,7 +47,7 @@ export default {
           angularaxis: {rotation: 90},
           radialaxis: {
             visible: true,
-            range: [0, 1]
+            range: [0, 250]
           }
         },
         margin: {
