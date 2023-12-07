@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row align="center" justify="center" className="mt-1 mb-0">
-      <h3 > Visualization of the Cluster used for Recommendation </h3>
+      <h3 class="cluster-title"> Visualization of the Cluster used for Recommendation </h3>
     </v-row>
     <div id="PCAScatter" style="height: auto;"></div>
   </div>
@@ -95,8 +95,8 @@ export default {
 
       const data = [trace1];
       const layout = {
-        width: 600,
-        height: 600,
+        width: 450,
+        height: 450,
         xaxis: {
           title: 'PCA1',
           aspectratio: {
@@ -172,5 +172,9 @@ export default {
 <style scoped>
 #PCAScatter {
   width: 100%;
+}
+
+.cluster-title {
+  margin-top: 100px;
 }
 </style>
