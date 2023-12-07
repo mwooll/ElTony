@@ -20,7 +20,7 @@
       <v-row align="center" justify="center">
       <v-img :src="getPokemonImage(clusterStats.image)" height="130" width="130" align="center" style="margin-top: 30px;"></v-img>
       </v-row>
-        <p style="color:yellow; font-weight:bold" align="center">{{ clusterStats.name }}</p>
+        <p style="color:orange; font-weight:bold" align="center">{{ clusterStats.name }}</p>
     </v-col>
     <v-row align="center" justify="center">
     <v-btn color="yellow" @click="resetFilters" class="button" align="center">Reset
@@ -99,7 +99,7 @@
             theta: ['HP', 'Attack', 'Defense', 'Sp. Atk', 'Sp. Def', 'Speed'],
             fill: 'toself',
             name: 'Cluster Pokemon',
-            line: { color: 'yellow' },
+            line: { color: 'orange' },
             text: [clusterStats.hp, clusterStats.attack, clusterStats.defense, clusterStats.spAtk, clusterStats.spDef, clusterStats.speed].map(String),
             hoverinfo: 'text', // Change the color of the second trace
           },

@@ -14,7 +14,11 @@
         ></v-select>
       </v-col>
     </v-row>
-
+    <v-row>
+      <v-col cols="12" class="recommend-row">
+        <v-btn @click="recommendTeam" color="yellow">Recommend Team</v-btn>
+      </v-col>
+    </v-row>
     <v-row>
       <!-- Team images with name, key feature, and swap button -->
       <v-col v-for="(pokemon, index) in recommendedPokemon" :key="index" cols="4">
@@ -40,11 +44,7 @@
         </v-row>
       </v-col>
     </v-row>
-    <v-row>
-      <v-col cols="12" class="recommend-row">
-        <v-btn @click="recommendTeam" color="yellow">Recommend Team</v-btn>
-      </v-col>
-    </v-row>
+
     <v-row v-if="swapButtonClicked">
         <v-select
             v-model="selectedOtherPokemon"

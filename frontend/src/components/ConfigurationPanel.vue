@@ -34,18 +34,21 @@
 
         <!-- Right: Team Section -->
         <v-col cols="12" md="12" lg="4" class="columns">
+          <v-col mb="2">
 
+          <TeamSection @recommendationMade="updateRecommendedPokemon" @navigateToPokemonDetails="handleNavigateToPokemon" />
+          </v-col >
+          <v-col>
 
-              <TeamSection @recommendationMade="updateRecommendedPokemon" @navigateToPokemonDetails="handleNavigateToPokemon" />
-              <ClusterVis
+          <ClusterVis
                   v-if="recommendedPokemon.length > 0"
-
                   :key="PCAScatter"
                   :selectedCategory="pokemons.selectedValue"
                   @pokemonSelectedCluster="handleClusterSelection"
                   :data="scatterPlotData"
                   :highlightedPokemon="highlightedPokemon"
               />
+          </v-col>
 
 
         </v-col>
