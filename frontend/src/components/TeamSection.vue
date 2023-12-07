@@ -268,10 +268,10 @@ export default {
 }
 
 .container {
-//display: flex;
+  display: flex;
   justify-content: center;
   align-items: center;
-//flex-direction: column;
+  flex-direction: column;
 }
 .swap{
   margin-top: 5px;
