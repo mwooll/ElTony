@@ -126,7 +126,7 @@
             angularaxis: { rotation: 90 },
             radialaxis: {
               visible: true,
-              range: [0, 250],
+              range: [0, 175],
             },
           },
           paper_bgcolor: 'rgba(0,0,0,0)',  // Transparent background for the whole chart
