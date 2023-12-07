@@ -32,7 +32,7 @@
             <!-- Pokemon details container -->
             <div class="pokemon-details" :class="getPokemonTypeClass(pokemon.Types)">
               <p>{{ pokemon.Name }}</p>
-              <p>{{ pokemon.Types }}</p>
+              <p>{{ displayType(pokemon.Types) }}</p>
               <p>{{ pokemon.Key_Feature }}</p>
               <!-- Swap button -->
               <v-btn @click="swapPokemon(pokemon)" color="primary" class="swap" icon fab><v-icon>
@@ -110,6 +110,14 @@ export default {
         console.error('Invalid type:', type);
         return defaultClass;
       }
+    },
+    displayType(typing) {
+      let splitted = typing.split(",")
+      console.log(splitted)
+      if (splitted[1] == "nan") {
+        return splitted[0]
+      }
+      return splitted[0] + ", " + splitted[1]
     },
     navigateToPokemonDetails(pokemon) {
 
