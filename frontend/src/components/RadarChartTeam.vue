@@ -1,7 +1,7 @@
 <template>
   <v-btn icon class="expand-button" @click="expandPlot">
-      <v-icon>mdi-fullscreen</v-icon>
-    </v-btn>
+    <v-icon>mdi-fullscreen</v-icon>
+  </v-btn>
   <v-row align="center" justify="center" className="mt-1 mb-0">
     <h3 align = "center">Average Stats for Recommended Team</h3>
   </v-row>
@@ -37,8 +37,8 @@ export default {
     drawSpiderPlot(stats) {
       var data = [{
         type: 'scatterpolar',
-        r: [stats.HP, stats.Attack, stats.Defense, stats.Sp_Atk, stats.Sp_Def, stats.Speed],
-        theta: ['HP', 'Attack', 'Defense', 'Sp. Atk', 'Sp. Def', 'Speed'],
+        r: [stats.HP, stats.Attack, stats.Defense, stats.Sp_Atk, stats.Sp_Def, stats.Speed, stats.HP],
+        theta: ['HP', 'Attack', 'Defense', 'Sp. Atk', 'Sp. Def', 'Speed', 'HP'],
         fill: 'toself'
       }];
 
@@ -51,8 +51,8 @@ export default {
           }
         },
         margin: {
-            t: 30  // Top margin, increase this value to add more space above the chart
-          },
+          t: 30
+        },
         showlegend: false
       };
 
